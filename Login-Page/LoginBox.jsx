@@ -1,12 +1,18 @@
+import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 
 function LoginBox() {
   const [email, setEmail] = useState('');
   const [senha, setSenha] = useState('');
+  const navigate = useNavigate();
 
   function handleLogin(e) {
     e.preventDefault();         
     console.log('Login:', email, senha);
+  }
+
+  function irParaCadastro() {
+    navigate('/cadastro');
   }
 
   return (
@@ -34,7 +40,9 @@ function LoginBox() {
       <button type="submit">Entrar</button>
 
       <a href="#">Esqueci minha senha</a>
-      <a href="#">Primeiro acesso (coordenação)</a>
+      <p onClick={irParaCadastro} style={{ cursor: 'pointer', color: 'yellow', marginTop: '10px' }}>
+        Primeiro acesso à coordenação
+      </p>
     </form>
   );
 }
