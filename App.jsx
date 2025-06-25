@@ -1,8 +1,16 @@
-//App.jsx
-import LoginPage from './Login-Page/LoginPage';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import LoginPage from "./Login-Page/LoginPage";
+import CadastroPage from './Cadastro-Page/CadastroPage';
 
 function App() {
-  return <LoginPage />;
+  return (
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<LoginPage />} />
+        <Route path="/cadastro" element={<CadastroPage />} />
+      </Routes>
+    </BrowserRouter>
+  );
 }
 
 export default App;
