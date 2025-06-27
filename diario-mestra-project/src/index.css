@@ -9,18 +9,38 @@ body {
   align-items: center;
   padding: 10px 20px;
   color: white;
+  height: 80px;
 }
-
+.topo h1 {
+  margin: 0 auto;
+  font-size: 24px;
+}
 .logo {
   width: 50px;
   height: 50px;
   border-radius: 50%;
 }
-
-.topo h1 {
-  margin: 0 auto;
-  font-size: 24px;
+ /* conteudo geral*/
+.main-container {
+  display: flex;
+  min-height: 270vh;
 }
+
+.content {
+  flex: 1;
+  padding: 2rem;
+  background-color: #fdfdfd;
+  font-family: sans-serif;
+}
+
+
+.content h1 {
+  font-size: 2rem;
+  margin-bottom: 2rem;
+  font-weight: bold;
+}
+
+/*pagina de login*/
 
 .container {
   display: flex;
@@ -71,4 +91,148 @@ body {
   text-align: center;
   margin-top: 5px;
   text-decoration: underline;
+}
+
+/*dide bar geral da coordenação*/
+.sidebar {
+  width: 200px;
+  height:550px;
+  background-color: #7a0c2e;
+  color:white;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  position: flex;
+
+}
+
+.sidebar ul {
+  list-style-type: none;
+  padding: 5px;
+  
+}
+
+.sidebar li{
+  margin-top: 15px;
+  margin-bottom: 15px;
+
+}
+
+.sidebar li:hover {
+  color: wheat;
+}
+
+.sidebar button {
+  width: 50px;
+  padding: 5px;
+  background-color: #54001e;
+  color: white;
+  border-radius: 5px;
+  border-style: none;
+}
+
+.sidebar button:hover {
+  transform: scale(110%);
+}
+
+.menu-principal {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+.menu-inferior {
+  list-style-type: none;
+  padding: 0;
+  margin-top: auto; /* empurra para baixo */
+}
+
+.botao-voltar {
+  margin-top: 20px;
+  background-color: #7a0c2e;
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 6px;
+}
+
+/*tela inicial*/
+
+.conteudo {
+  margin-left: 300px;
+  padding: 20px;
+  width: 100%;
+}
+
+.cardsResumo {
+  display: flex;
+  gap: 25px;
+  flex-wrap: wrap;
+  flex: 1 1 200px;
+}
+
+.cardsResumo div {
+  padding: 20px;
+  background-color: #eee;
+  border-radius: 10px;
+  min-width: 50px;
+  max-width: 200px;
+  text-align: center;
+  justify-content: center;
+}
+
+.react-calendar {
+  width: 800px;
+  max-width: 100%;
+  background-color: #fff;
+  border-radius: 10px;
+  padding: 10px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  margin-top: 15px;
+}
+
+/*css da Pagina de Gerenciamento*/
+
+.cardsCoordGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr); /* 2 colunas fixas */
+  gap: 2rem;
+}
+
+.cardCoord {
+  background-color: #ffeef3;
+  padding: 1.5rem;
+  border-radius: 10px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.cardCoord h2 {
+  font-size: 1.25rem;
+  margin-bottom: 0.75rem;
+   font-weight: bold;
+  color: #55001a;
+  border-bottom: 2px solid #ccc;
+  width: fit-content;
+  padding-bottom: 0.2rem;
+}
+
+.cardCoord p {
+  font-size: 0.95rem;
+  color: #333;
+  margin-bottom: 1.2rem;
+  line-height: 1.4;
+}
+
+.cardCoord button {
+  padding: 0.4rem 1rem;
+  background-color: #7a0c2e;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  margin-top: 1rem;
+}
+
+.cardCoord button:hover {
+  background-color: #5a0822;
 }
