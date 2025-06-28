@@ -33,7 +33,6 @@ body {
   font-family: sans-serif;
 }
 
-
 .content h1 {
   font-size: 2rem;
   margin-bottom: 2rem;
@@ -98,7 +97,7 @@ body {
   width: 200px;
   height:550px;
   background-color: #7a0c2e;
-  color:white;
+  color:rgb(255, 255, 255);
   padding: 20px;
   display: flex;
   flex-direction: column;
@@ -118,7 +117,12 @@ body {
 
 }
 
-.sidebar li:hover {
+.sidebar a{
+  color: #fff;
+  text-decoration: none;
+}
+
+.sidebar a:hover {
   color: wheat;
 }
 
@@ -236,3 +240,5 @@ body {
 .cardCoord button:hover {
   background-color: #5a0822;
 }
+
+/*gerenciamaento*/

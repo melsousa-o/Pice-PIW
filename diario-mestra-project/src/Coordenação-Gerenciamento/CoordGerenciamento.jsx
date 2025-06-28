@@ -1,5 +1,6 @@
 import HeaderCoord from "./HeaderCoordenação";
 import SidebarMenu from "./SidebarMenu";
+import { Link } from "react-router-dom";
 
 function CoordGerenciamento() {
   const cards = [
@@ -7,21 +8,25 @@ function CoordGerenciamento() {
       titulo: "Matérias",
       descricao: "Cadastre as disciplinas oferecidas pela escola...",
       botao: "Gerenciar Matérias",
+      rota: "/gerenciar-materias",
     },
     {
       titulo: "Turmas",
       descricao: "Crie e organize as turmas por série e período...",
       botao: "Gerenciar Turmas",
+      rota: "/gerenciar-turmas",
     },
     {
       titulo: "Alunos",
       descricao: "Gerencie o cadastro de alunos...",
       botao: "Gerenciar Alunos",
+      rota: "/gerenciar-alunos",
     },
     {
       titulo: "Professores",
       descricao: "Cadastre, edite ou remova professores...",
       botao: "Gerenciar Professores",
+      rota: "/gerenciar-professores",
     },
   ];
 
@@ -42,7 +47,9 @@ function CoordGerenciamento() {
               <div className="cardCoord" key={index}>
                 <h2>{card.titulo}</h2>
                 <p>{card.descricao}</p>
-                <button>{card.botao}</button>
+                <Link to={card.rota}>
+                  <button className="botao-gerenciar">{card.botao}</button>
+                </Link>
               </div>
             ))}
           </div>
