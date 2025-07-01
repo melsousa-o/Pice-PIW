@@ -13,6 +13,10 @@ function GerenciamentoAlunos() {
       
       <main className="content">
         <h1>Gerenciamento de Alunos</h1>
+
+      <div>
+        
+      </div>
       </main>
     </div>
     </>
