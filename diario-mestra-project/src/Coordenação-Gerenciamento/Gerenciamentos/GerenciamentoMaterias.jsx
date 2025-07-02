@@ -3,7 +3,7 @@ import SidebarMenu from "../SidebarMenu";
 import { useState } from "react";
 
 function GerenciamentoMaterias() {
-  const [materias, setMaterias] = useState(['']); // começa vazio
+  const [materias, setMaterias] = useState([]); // começa vazio
   const [novaMateria, setNovaMateria] = useState("");
   const [mostrarPopup, setMostrarPopup] = useState(false);
 

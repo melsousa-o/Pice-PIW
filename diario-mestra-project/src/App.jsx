@@ -6,6 +6,8 @@ import GerenciamentoTurmas from './Coordenação-Gerenciamento/Gerenciamentos/Ge
 import GerenciamentoProfessores from './Coordenação-Gerenciamento/Gerenciamentos/GerenciamentoProfessores';
 import GerenciamentoAlunos from './Coordenação-Gerenciamento/Gerenciamentos/GereciamentoAlunos';
 
+import Relatório from './Relatório/Relatório';
+
 function App() {
   return (
     <BrowserRouter>
@@ -16,6 +18,8 @@ function App() {
         <Route path="/gerenciar-turmas" element={<GerenciamentoTurmas />} />
         <Route path="/gerenciar-alunos" element={<GerenciamentoAlunos />} />
         <Route path="/gerenciar-professores" element={<GerenciamentoProfessores />} />
+        <Route path="/relatorio" element={<Relatório />} />
+
       </Routes>
     </BrowserRouter>
   );

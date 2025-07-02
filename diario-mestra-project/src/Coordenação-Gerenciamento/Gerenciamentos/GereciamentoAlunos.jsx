@@ -7,13 +7,15 @@ function GerenciamentoAlunos() {
   const [novoAluno, setNovoAluno] = useState({
     nome: "",
     cpf: "",
-    responsavel: "", // Corrigido aqui (antes estava "reponsavel")
-    cpfResponsavel: ""
+    responsavel: "",
+    cpfResponsavel: "",
+    foto: null,
   });
+
   const [mostrarPopup, setMostrarPopup] = useState(false);
 
   const adicionarAluno = () => {
-    const nomeTrimado = novoAluno.nome.trim(); // Corrigido aqui
+    const nomeTrimado = novoAluno.nome.trim();
 
     if (
       nomeTrimado &&
@@ -24,9 +26,18 @@ function GerenciamentoAlunos() {
         nome: "",
         cpf: "",
         responsavel: "",
-        cpfResponsavel: ""
+        cpfResponsavel: "",
+        foto: null,
       });
       setMostrarPopup(false);
+    }
+  };
+
+  const handleImagemChange = (e) => {
+    const arquivo = e.target.files[0]; // ✅ corrigido "="
+    if (arquivo) {
+      const url = URL.createObjectURL(arquivo);
+      setNovoAluno({ ...novoAluno, foto: url });
     }
   };
 
@@ -34,7 +45,7 @@ function GerenciamentoAlunos() {
     const { name, value } = e.target;
     setNovoAluno((prev) => ({
       ...prev,
-      [name]: value
+      [name]: value,
     }));
   };
 
@@ -56,11 +67,21 @@ function GerenciamentoAlunos() {
 
           <div className="cardsContainer">
             {alunos.map((aluno, index) => (
+
               <div key={index} className="cardAluno">
-                <p>Aluno: {aluno.nome}</p>
-                <p>CPF: {aluno.cpf}</p>
-                <p>Responsável: {aluno.responsavel}</p>
-                <p>CPF do Responsável: {aluno.cpfResponsavel}</p>
+                <div className="conteudoCardBranco">
+                  {aluno.foto && (
+                    <img
+                      src={aluno.foto}
+                      alt="Foto do Aluno"
+                      style={{ width: "80px", height: "80px", borderRadius: "50%" }}
+                    />
+                  )}
+                  <p>Aluno: {aluno.nome}</p>
+                  <p>CPF: {aluno.cpf}</p>
+                  <p>Responsável: {aluno.responsavel}</p>
+                  <p>CPF: {aluno.cpfResponsavel}</p>
+                </div>
               </div>
             ))}
           </div>
@@ -94,14 +115,31 @@ function GerenciamentoAlunos() {
                 <input
                   type="text"
                   name="cpfResponsavel"
-                  placeholder="CPF do responsável"
+                  placeholder="CPF"
                   value={novoAluno.cpfResponsavel}
                   onChange={handleChange}
                 />
 
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={handleImagemChange}
+                />
+
+                {novoAluno.foto && (
+                  <img  className="cardfoto"
+                    src={novoAluno.foto}
+                    alt="Foto do Aluno"
+                  />
+                )}
+
                 <div>
-                  <button className="botao" onClick={adicionarAluno}>Cadastrar</button>
-                  <button className="botao" onClick={() => setMostrarPopup(false)}>Cancelar</button>
+                  <button className="botao" onClick={adicionarAluno}>
+                    Cadastrar
+                  </button>
+                  <button className="botao" onClick={() => setMostrarPopup(false)}>
+                    Cancelar
+                  </button>
                 </div>
               </div>
             </div>
