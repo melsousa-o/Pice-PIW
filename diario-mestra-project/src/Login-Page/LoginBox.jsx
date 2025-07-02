@@ -9,6 +9,8 @@ function LoginBox() {
   function handleLogin(e) {
     e.preventDefault();         
     console.log('Login:', email, senha);
+    // Navega para a próxima página levando os dados de email e senha
+    navigate('/CompararLogin', { state: { email, senha } });
   }
 
   function irParaCadastro() {
