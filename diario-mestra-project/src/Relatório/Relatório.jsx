@@ -16,7 +16,7 @@ function Relatorios() {
 
   const gerarRelatorio = () => {
     console.log("Filtros selecionados:", filtros);
-    // Aqui você pode adicionar lógica de fetch, geração de PDF, etc.
+    // Aqui dá pra adicionar lógica de fetch, geração de PDF, etc.
   };
 
   return (
