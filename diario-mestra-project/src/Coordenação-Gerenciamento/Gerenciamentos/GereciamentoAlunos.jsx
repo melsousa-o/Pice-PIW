@@ -34,7 +34,7 @@ function GerenciamentoAlunos() {
   };
 
   const handleImagemChange = (e) => {
-    const arquivo = e.target.files[0]; // ✅ corrigido "="
+    const arquivo = e.target.files[0];
     if (arquivo) {
       const url = URL.createObjectURL(arquivo);
       setNovoAluno({ ...novoAluno, foto: url });
@@ -74,7 +74,6 @@ function GerenciamentoAlunos() {
                     <img
                       src={aluno.foto}
                       alt="Foto do Aluno"
-                      style={{ width: "80px", height: "80px", borderRadius: "50%" }}
                     />
                   )}
                   <p>Aluno: {aluno.nome}</p>
@@ -122,7 +121,7 @@ function GerenciamentoAlunos() {
 
                 <input
                   type="file"
-                  accept="image/*"
+                  accept="image"
                   onChange={handleImagemChange}
                 />
 
