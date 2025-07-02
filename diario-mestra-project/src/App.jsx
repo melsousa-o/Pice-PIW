@@ -7,6 +7,7 @@ import GerenciamentoProfessores from './Coordenação-Gerenciamento/Gerenciament
 import GerenciamentoAlunos from './Coordenação-Gerenciamento/Gerenciamentos/GereciamentoAlunos';
 
 import Relatório from './Relatório/Relatório';
+import Mensagem from './Mensagem/Mensagem';
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
         <Route path="/gerenciar-alunos" element={<GerenciamentoAlunos />} />
         <Route path="/gerenciar-professores" element={<GerenciamentoProfessores />} />
         <Route path="/relatorio" element={<Relatório />} />
+        <Route path="/mensagem" element={<Mensagem/>} />
 
       </Routes>
     </BrowserRouter>

@@ -1,4 +1,4 @@
-import HeaderCoord from "./HeaderCoordenação";
+import HeaderCoord from "../Coodernação-TelaInicial/HeaderCoordenação";
 import SidebarMenu from "./SidebarMenu";
 import { Link } from "react-router-dom";
 

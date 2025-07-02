@@ -102,6 +102,7 @@ body {
 /* Botão geral */
 .botao {
   margin-top: 20px;
+  margin-right: 5px;
   padding: 10px 16px;
   background-color: #7a0c2e;
   color: white;
