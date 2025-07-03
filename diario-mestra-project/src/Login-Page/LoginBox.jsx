@@ -7,9 +7,8 @@ function LoginBox() {
   const navigate = useNavigate();
 
   function handleLogin(e) {
-    e.preventDefault();         
+    e.preventDefault();
     console.log('Login:', email, senha);
-    // Navega para a próxima página levando os dados de email e senha
     navigate('/CompararLogin', { state: { email, senha } });
   }
 
@@ -48,5 +47,4 @@ function LoginBox() {
     </form>
   );
 }
-
 export default LoginBox;

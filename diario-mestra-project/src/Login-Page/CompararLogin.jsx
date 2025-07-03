@@ -1,18 +1,22 @@
-import { useState, useEffect } from 'react';
-import './loginBox.css';
+import { useState } from 'react';
 import HeaderCoord from '../Coodernação-TelaInicial/HeaderCoordenação';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
+import './Login.css';
 
-function CompararLogin({ email, senha }) {
+function CompararLogin() {
   const [confirmEmail, setConfirmEmail] = useState('');
   const [confirmSenha, setConfirmSenha] = useState('');
   const navigate = useNavigate();
+  const location = useLocation();
+
+  const email = location.state?.email || '';
+  const senha = location.state?.senha || '';
 
   const isMatch = email === confirmEmail && senha === confirmSenha;
 
   return (
     <>
-      <HeaderCoord />
+    
       <label className='info-confirm'>
         <a>Confirmar E‑mail</a>
         <input
@@ -31,9 +35,10 @@ function CompararLogin({ email, senha }) {
         <button
           className='confirm-btn'
           onClick={() => {
-            alert('Login confirmado!');
-            navigate('/CoordTelaInicial');
-            // Redirecionamento ou próxima ação aqui
+            if (isMatch) {
+              alert('Login confirmado!');
+              navigate('/Coord');
+            }
           }}
           disabled={!isMatch}
         >

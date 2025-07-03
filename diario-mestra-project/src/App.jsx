@@ -9,14 +9,15 @@ import GerenciamentoAlunos from './Coordenação-Gerenciamento/Gerenciamentos/Ge
 import Relatório from './Relatório/Relatório';
 import Mensagem from './Mensagem/Mensagem';
 import CompararLogin from './Login-Page/CompararLogin';
+import LoginBox from './Login-Page/LoginBox';
 
 function App() {
   return (
     <BrowserRouter>
       <Routes>
-         <Route path="/Login" element={<LoginBox />} />
+         <Route path="/" element={<LoginBox />} />
+         <Route path="/CompararLogin" element={<CompararLogin />} />
         <Route path="/Coord" element={<CoordTelaInicial />} />
-        <Route path="/CompararLogin" element={<CompararLogin />} />
         <Route path="/gerenciamento" element={<CoordGerenciamento />} />
         <Route path="/gerenciar-materias" element={<GerenciamentoMaterias />} />
         <Route path="/gerenciar-turmas" element={<GerenciamentoTurmas />} />
