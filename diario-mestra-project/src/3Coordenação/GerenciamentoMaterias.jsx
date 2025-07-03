@@ -52,7 +52,7 @@ function GerenciamentoMaterias() {
                 onChange={(e) => setNovaMateria(e.target.value)}
               />
 
-              <div>
+              <div className="botoesPopup">
                 <button className="botaoPopupCancelar" onClick={() => setMostrarPopup(false)}>Cancelar</button>
                 <button className="botaoPopup" onClick={adicionarMateria}>Cadastrar</button>
                 

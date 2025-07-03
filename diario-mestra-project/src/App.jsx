@@ -1,7 +1,7 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
 import CompararLogin from './1Login-Page/CompararLogin';
-import LoginBox from './1Login-Page/LoginBox';
+import LoginBox from './1Login-Page/LoginPage';
 
 import CoordTelaInicial from './3Coordenação/CoordTelaInicial';
 import CoordGerenciamento from './3Coordenação/CoordGerenciamento';
@@ -19,7 +19,7 @@ function App() {
       <Routes>
          <Route path="/" element={<LoginBox />} />
          <Route path="/CompararLogin" element={<CompararLogin />} />
-        <Route path="/Coord" element={<CoordTelaInicial />} />
+        <Route path="/inicio" element={<CoordTelaInicial />} />
         <Route path="/gerenciamento" element={<CoordGerenciamento />} />
         <Route path="/gerenciar-materias" element={<GerenciamentoMaterias />} />
         <Route path="/gerenciar-turmas" element={<GerenciamentoTurmas />} />
