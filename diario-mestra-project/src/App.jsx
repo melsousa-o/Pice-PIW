@@ -1,3 +1,4 @@
+
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
 import CompararLogin from './1Login-Page/CompararLogin';
@@ -17,15 +18,15 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
-         <Route path="/" element={<LoginBox />} />
-         <Route path="/CompararLogin" element={<CompararLogin />} />
-        <Route path="/inicio" element={<CoordTelaInicial />} />
-        <Route path="/gerenciamento" element={<CoordGerenciamento />} />
-        <Route path="/gerenciar-materias" element={<GerenciamentoMaterias />} />
-        <Route path="/gerenciar-turmas" element={<GerenciamentoTurmas />} />
-        <Route path="/gerenciar-alunos" element={<GerenciamentoAlunos />} />
-        <Route path="/gerenciar-professores" element={<GerenciamentoProfessores />} />
-        <Route path="/relatorio" element={<Relatório />} />
+         <Route path="/" element={<LoginBox/>} />
+         <Route path="/CompararLogin" element={<CompararLogin/>} />
+        <Route path="/coord" element={<CoordTelaInicial/>} />
+        <Route path="/gerenciamento" element={<CoordGerenciamento/>} />
+        <Route path="/gerenciar-materias" element={<GerenciamentoMaterias/>} />
+        <Route path="/gerenciar-turmas" element={<GerenciamentoTurmas/>} />
+        <Route path="/gerenciar-alunos" element={<GerenciamentoAlunos/>} />
+        <Route path="/gerenciar-professores" element={<GerenciamentoProfessores/>} />
+        <Route path="/relatorio" element={<Relatório/>} />
         <Route path="/mensagem" element={<Mensagem/>} />
 
       </Routes>

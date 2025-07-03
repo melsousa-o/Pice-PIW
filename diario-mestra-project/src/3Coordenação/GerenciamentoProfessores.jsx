@@ -69,10 +69,13 @@ function GerenciamentoProfessores() {
 
           <div className="cardscontainer">
             {professores.map((professor, index) => (
-              <div key={index} className="conteudoCardBranco">
-                <div className="cardProfessor">
+              <div key={index} className="cardProfessor">
+                <div className="conteudoCardBranco">
                   {professor.foto && (
-                    <img src={professor.foto} alt="Foto do professor" />
+                    <img 
+                    className="cardfoto"
+                    src={professor.foto}
+                    alt="Foto do professor" />
                   )}
                   <p>Professor: {professor.nome}</p>
                   <p>CPF: {professor.CPF}</p>
@@ -84,7 +87,7 @@ function GerenciamentoProfessores() {
           </div>
 
           {mostrarPopup && (
-            <div className="popup-overlay">
+            <div className="popupOverlay">
               <div className="popup">
                 <h3>Novo Professor</h3>
 
@@ -127,11 +130,12 @@ function GerenciamentoProfessores() {
 
                 {novoProfessor.foto && (
                   <img
-                    className="cardfoto"
+                    className="cardfoto "
                     src={novoProfessor.foto}
-                    alt="Foto Professor"
+                    alt="Foto do Aluno"
                   />
                 )}
+
 
                 <div className="botoesPopup">
                 <button className="botaoPopupCancelar"

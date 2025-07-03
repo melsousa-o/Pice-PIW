@@ -74,8 +74,7 @@ function GerenciamentoAlunos() {
                     <img
                       className="cardfoto"
                       src={aluno.foto}
-                      alt="Foto do Aluno"
-                    />
+                      alt="Foto do Aluno"/>
                   )}
                   <p>Aluno: {aluno.nome}</p>
                   <p>CPF: {aluno.cpf}</p>
@@ -141,14 +140,10 @@ function GerenciamentoAlunos() {
                 )}
 
                 <div className="botoesPopup">
-                  <button
-                    className="botaoPopupCancelar"
-                    onClick={() => setMostrarPopup(false)}>
-                      Cancelar
-                  </button>
-                  <button className="botaoPopup" onClick={adicionarAluno}>
-                    Cadastrar
-                  </button>
+                  <button className="botaoPopupCancelar" 
+                    onClick={() => setMostrarPopup(false)}> Cancelar </button>
+                  <button className="botaoPopup" onClick={adicionarAluno}>Cadastrar</button>
+                
                 </div>
               </div>
             </div>

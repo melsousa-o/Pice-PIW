@@ -4,7 +4,7 @@ function SidebarMenu() {
   return (
     <nav className="sidebar">
       <ul className="menu-principal">
-        <li><Link to="/inicio">Início</Link></li>
+        <li><Link to="/coord">Início</Link></li>
         <li><Link to="/gerenciamento">Gerenciamento</Link></li>
         <li><Link to="/relatorio">Relatório</Link></li>
         <li><Link to="/mensagem">Mensagem</Link></li>
