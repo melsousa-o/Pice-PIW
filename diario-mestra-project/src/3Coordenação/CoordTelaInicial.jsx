@@ -1,5 +1,5 @@
-import HeaderCoord from "./HeaderCoordenação";
-import SidebarMenu from "./SidebarMenu";
+import HeaderCoord from "./1Componentes/HeaderCoordenação";
+import SidebarMenu from "./1Componentes/SidebarMenu";
 import Calendar from "react-calendar";
 import 'react-calendar/dist/Calendar.css';
 import { useState } from 'react';

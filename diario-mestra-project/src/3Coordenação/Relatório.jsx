@@ -1,6 +1,5 @@
-import HeaderCoord from "./HeaderCoordenação";
-import SidebarMenu from "./SidebarMenu";
-import { useState } from "react";
+import HeaderCoord from "./1Componentes/HeaderCoordenação";
+import SidebarMenu from "./1Componentes/SidebarMenu";;
 
 function Relatorios() {
   const [filtros, setFiltros] = useState({

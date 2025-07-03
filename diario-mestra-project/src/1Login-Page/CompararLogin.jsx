@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import HeaderCoord from '../Coodernação-TelaInicial/HeaderCoordenação';
+import LoginHeader from './LoginHeader';
 import { useNavigate, useLocation } from 'react-router-dom';
 
 function CompararLogin() {

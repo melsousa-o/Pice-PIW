@@ -1,15 +1,17 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import CoordTelaInicial from './Coodernação-TelaInicial/CoordTelaInicial';
-import CoordGerenciamento from './Coordenação-Gerenciamento/CoordGerenciamento';
-import GerenciamentoMaterias from './Coordenação-Gerenciamento/Gerenciamentos/GerenciamentoMaterias';
-import GerenciamentoTurmas from './Coordenação-Gerenciamento/Gerenciamentos/GerenciamentoTurmas';
-import GerenciamentoProfessores from './Coordenação-Gerenciamento/Gerenciamentos/GerenciamentoProfessores';
-import GerenciamentoAlunos from './Coordenação-Gerenciamento/Gerenciamentos/GereciamentoAlunos';
 
-import Relatório from './Relatório/Relatório';
-import Mensagem from './Mensagem/Mensagem';
-import CompararLogin from './Login-Page/CompararLogin';
-import LoginBox from './Login-Page/LoginBox';
+import CompararLogin from './1Login-Page/CompararLogin';
+import LoginBox from './1Login-Page/LoginBox';
+
+import CoordTelaInicial from './3Coordenação/CoordTelaInicial';
+import CoordGerenciamento from './3Coordenação/CoordGerenciamento';
+import GerenciamentoMaterias from './3Coordenação/GerenciamentoMaterias';
+import GerenciamentoTurmas from './3Coordenação/GerenciamentoTurmas';
+import GerenciamentoProfessores from './3Coordenação/GerenciamentoProfessores';
+import GerenciamentoAlunos from './3Coordenação/GereciamentoAlunos';
+
+import Relatório from './3Coordenação/Relatório';
+import Mensagem from './3Coordenação/Mensagem';
 
 function App() {
   return (

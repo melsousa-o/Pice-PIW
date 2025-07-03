@@ -1,5 +1,5 @@
-import HeaderCoord from "../Coodernação-TelaInicial/HeaderCoordenação";
-import SidebarMenu from "./SidebarMenu";
+import HeaderCoord from "./1Componentes/HeaderCoordenação";
+import SidebarMenu from "./1Componentes/SidebarMenu";
 import { Link } from "react-router-dom";
 
 function CoordGerenciamento() {
