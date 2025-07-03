@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import HeaderCoord from '../Coodernação-TelaInicial/HeaderCoordenação';
 import { useNavigate, useLocation } from 'react-router-dom';
-import './Login.css';
 
 function CompararLogin() {
   const [confirmEmail, setConfirmEmail] = useState('');

@@ -18,7 +18,6 @@ function GerenciamentoTurmas() {
   };
 
   const cadastrarTurma = () => {
-    // Verifica se os campos obrigatórios foram preenchidos
     const { serie, periodo, materias } = novaTurma;
     if (serie && periodo && materias) {
       const nomeTurma = `${serie} - ${periodo} - ${materias}`;
@@ -58,7 +57,7 @@ function GerenciamentoTurmas() {
         {mostrarPopup && (
           <div className="popupOverlay">
             <div className="popup">
-              <h3>Nova turma</h3>
+              <h3>Nova Turma</h3>
 
               <div className="formGrid">
                 <div className="filtro">
@@ -102,16 +101,21 @@ function GerenciamentoTurmas() {
                     <option value="">Selecione</option>
                     <option value="Manhã">Manhã</option>
                     <option value="Tarde">Tarde</option>
-                    <option value="Noite">Noite</option>
                   </select>
                 </div>
               </div>
 
               <div className="botoesPopup">
-                <button className="botao" onClick={cadastrarTurma}>Cadastrar</button>
-                <button className="botao cancelar" onClick={() => setMostrarPopup(false)}>Cancelar</button>
+                <button
+                  className="botaoPopupCancelar"
+                  onClick={() => setMostrarPopup(false)}
+                >
+                  Cancelar
+                </button>
+                <button className="botaoPopup" onClick={cadastrarTurma}>
+                  Cadastrar
+                </button>
               </div>
-
             </div>
           </div>
         )}

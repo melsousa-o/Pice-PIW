@@ -133,14 +133,12 @@ function GerenciamentoProfessores() {
                   />
                 )}
 
-                <div>
-                  <button className="botao" onClick={adicionarProfessor}>
-                    Cadastrar
-                  </button>
-                  <button className="botao" onClick={() => setMostrarPopup(false)}>
-                    Cancelar
-                  </button>
-                </div>
+                <div className="botoesPopup">
+                <button className="botaoPopupCancelar"
+                onClick={() => setMostrarPopup(false)}>Cancelar</button>
+                <button className="botaoPopup" onClick={adicionarProfessor}>Cadastrar</button>
+                
+              </div>
               </div>
             </div>
           )}

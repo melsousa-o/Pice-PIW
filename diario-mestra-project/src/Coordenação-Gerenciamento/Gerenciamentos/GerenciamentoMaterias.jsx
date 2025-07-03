@@ -53,8 +53,9 @@ function GerenciamentoMaterias() {
               />
 
               <div>
-                <button className="botao" onClick={adicionarMateria}>Cadastrar</button>
-                <button className="botao" onClick={() => setMostrarPopup(false)}>Cancelar</button>
+                <button className="botaoPopupCancelar" onClick={() => setMostrarPopup(false)}>Cancelar</button>
+                <button className="botaoPopup" onClick={adicionarMateria}>Cadastrar</button>
+                
               </div>
             </div>
           </div>

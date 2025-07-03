@@ -5,10 +5,10 @@
   --bg-principal: #7a0c2e;
 }
 
-/* Reset base */
+/* RESET */
 body {
   margin: 0;
-  font-family: sans-serif;
+  font-family: 'Poppins', sans-serif;
   background-color: #fdfdfd;
   color: #333;
   display: flex;
@@ -19,22 +19,22 @@ body {
 
 /* HEADER */
 .topo {
-  background-color: var(--bg-principal);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: var(--header-height);
-  color: white;
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
+  height: var(--header-height);
+  background-color: var(--bg-principal);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   z-index: 100;
 }
 
 .topo h1 {
-  font-size: 24px;
   margin: 0;
+  font-size: 24px;
 }
 
 .logo {
@@ -45,14 +45,14 @@ body {
 
 /* SIDEBAR */
 .sidebar {
+  position: fixed;
+  top: var(--header-height);
+  left: 0;
   width: var(--sidebar-width);
   height: 100vh;
   background-color: var(--bg-principal);
   color: white;
   padding: 20px;
-  position: fixed;
-  top: var(--header-height);
-  left: 0;
   display: flex;
   flex-direction: column;
   box-sizing: border-box;
@@ -81,9 +81,10 @@ body {
   padding: 5px;
   background-color: #54001e;
   color: white;
-  border-radius: 5px;
   border: none;
+  border-radius: 5px;
   cursor: pointer;
+  transition: transform 0.2s;
 }
 
 .sidebar button:hover {
@@ -92,7 +93,7 @@ body {
 
 .menu-principal,
 .menu-inferior {
-  list-style-type: none;
+  list-style: none;
   padding: 0;
 }
 
@@ -102,15 +103,15 @@ body {
 
 .botao-voltar {
   margin-top: 20px;
+  padding: 8px 12px;
   background-color: var(--bg-principal);
   color: white;
   border: none;
-  padding: 8px 12px;
   border-radius: 6px;
   cursor: pointer;
 }
 
-/* Botão geral */
+/* BOTÃO GERAL */
 .botao {
   margin-top: 20px;
   margin-right: 5px;
@@ -121,13 +122,25 @@ body {
   border-radius: 8px;
   cursor: pointer;
   transition: background-color 0.3s ease;
+  justify-content: right;
 }
 
 .botao:hover {
   background-color: #7a1738;
 }
 
-/* MAIN */
+.botao.cancelar {
+  justify-content: left;
+  margin-right: 10px;
+  background-color: #999;
+  color: white;
+}
+
+.botao.cancelar:hover {
+  background-color: #777;
+}
+
+/* MAIN CONTAINER */
 .main-container {
   display: flex;
   height: calc(100vh - var(--header-height));
@@ -159,13 +172,13 @@ body {
 }
 
 .login-box {
-  background-color: var(--bg-principal);
   margin-top: var(--header-height);
   margin-left: var(--sidebar-width);
+  background-color: var(--bg-principal);
   padding: 30px;
   border-radius: 10px;
-  box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
   color: white;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
   display: flex;
   flex-direction: column;
   width: 300px;
@@ -173,8 +186,8 @@ body {
 
 .login-box label {
   margin-bottom: 15px;
-  font-weight: bold;
   font-size: 14px;
+  font-weight: bold;
 }
 
 .login-box input {
@@ -202,36 +215,34 @@ body {
   text-align: center;
   margin-top: 5px;
   text-decoration: underline;
-
 }
-
 
 /* FOOTER */
 .footer-container {
-  background-color: #55001a;
-  color: #ccc;
-  height: var(--footer-height);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
   position: fixed;
   bottom: 0;
   left: 0;
+  width: 100%;
+  height: var(--footer-height);
+  background-color: #55001a;
+  color: #ccc;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   z-index: 90;
 }
 
-/* DASHBOARD CARDS */
+/* DASHBOARD */
 .cardsResumo {
   display: flex;
-  gap: 25px;
   flex-wrap: wrap;
   justify-content: center;
+  gap: 25px;
 }
 
 .cardsResumo div {
-  padding: 20px;
   background-color: #eee;
+  padding: 20px;
   border-radius: 10px;
   min-width: 120px;
   max-width: 200px;
@@ -242,13 +253,11 @@ body {
 .react-calendar {
   width: 800px;
   max-width: 100%;
+  margin: 15px auto 0;
   background-color: #fff;
   border-radius: 10px;
   padding: 10px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  margin-top: 15px;
-  margin-left: auto;
-  margin-right: auto;
 }
 
 /* GERENCIAMENTO */
@@ -267,8 +276,8 @@ body {
 
 .cardCoord h2 {
   font-size: 1.25rem;
-  margin-bottom: 0.75rem;
   font-weight: bold;
+  margin-bottom: 0.75rem;
   color: #55001a;
   border-bottom: 2px solid #ccc;
   width: fit-content;
@@ -283,16 +292,16 @@ body {
 }
 
 .cardCoord button {
+  margin-top: 1rem;
   padding: 0.4rem 1rem;
   background-color: var(--bg-principal);
   color: white;
   border: none;
   border-radius: 6px;
   cursor: pointer;
-  margin-top: 1rem;
 }
 
-/* Popup */
+/* POPUP */
 .popupOverlay {
   position: fixed;
   top: 0;
@@ -301,110 +310,168 @@ body {
   bottom: 0;
   background-color: rgba(0, 0, 0, 0.4);
   display: flex;
-  align-items: center;
   justify-content: center;
+  align-items: center;
+  z-index: 1000; 
+}
+
+.popup {
+  width: 350px;
+  background: white;
+  padding: 30px;
+  border-radius: 15px;
+  box-shadow: 0 2px 15px rgba(0, 0, 0, 0.3);
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.popup h3 {
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-bottom: 10px;
 }
 
 .botoesPopup {
   display: flex;
-  flex-direction: column;
-  gap: 5px;
+  justify-content: space-between;
+  gap:10px;
 }
 
-.popup {
-  width: 300px;
-  background: white;
-  padding: 30px;
-  border-radius: 12px;
-  box-shadow: 0 0 10px black;
-  display: flex;
-  flex-direction: column;
-  gap: 5px;
-}
-
-/* Matérias */
-.cardsContainer {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 20px;
+.botaoPopup {
   margin-top: 20px;
+  margin-right: 5px;
+  padding: 10px 16px;
+  background-color: #54001e;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  
 }
 
-.cardMateria {
-  width: 150px;
-  background-color: #e2c5c5;
-  padding: 20px;
-  border-radius: 12px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  min-width: 150px;
-  text-align: center;
-  font-weight: bold;
+.botaoPopupCancelar {
+  margin-top: 20px;
+  margin-right: 5px;
+  padding: 10px 16px;
+  background-color: #eab6c8;
+  color: rgb(31, 0, 0);
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+} 
+
+
+.popup select,
+.popup input {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  width: 100%;
+  box-sizing: border-box;
 }
 
-/*Alunos*/
-.cardAluno {
-  flex-wrap: wrap;
-  height: 250px;
-  width: 250px;
-  background-color: #e2c5c5;
+/* INFO CONFIRM */
+.center-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100vw;
+  height: 100vh;
+  background-color: #f0f0f0;
+  box-sizing: border-box;
+  padding: 0 16px;
+}
+
+.info-confirm {
+  width: 100%;
+  max-width: 400px;
+  background-color: #54001e;
+  padding: 32px 24px;
+  margin-top: var(--header-height);
+  margin-left: var(--sidebar-width);
   border-radius: 10px;
-  padding: 12px;
-  margin: 10px 0;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-/* Turmas */
-.formGrid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 20px;
-}
-
-.cardTurma {
-  width: 150px;
-  background-color: #e2c5c5;
-  padding: 20px;
-  border-radius: 12px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  min-width: 150px;
-  text-align: center;
-  font-weight: bold;
-}
-
-.botao.cancelar {
-  background-color: #999;
-  /* cinza ou outra cor desejada */
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
   color: white;
 }
 
-.botao.cancelar:hover {
-  background-color: #777;
+.info-confirm a {
+  margin-bottom: 10px;
+  color: white;
+  text-decoration: underline;
+  font-weight: bold;
 }
 
-.conteudoCardBranco {
-  background-color: white;
+.info-confirm input {
+  margin-bottom: 16px;
   padding: 10px;
-  border-radius: 8px;
+  border: none;
+  border-radius: 5px;
+  width: 100%;
+  box-sizing: border-box;
 }
 
-.cardfoto {
-  width: "100px";
-  margin-top: 10px;
-  align-items: center;
-  justify-content: center;
+.confirm-btn {
+  padding: 10px;
+  border: 2px solid white;
+  background-color: #54001e;
+  color: white;
+  font-weight: bold;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background 0.3s;
 }
 
-.cardProfessor {
+.confirm-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.confirm-btn:hover:not(:disabled) {
+  background-color: #6b1232;
+}
+
+/* CARDS: MATÉRIAS, ALUNOS, PROFESSORES, TURMAS */
+.cardsContainer,
+.cardAluno,
+.cardProfessor,
+.cardMateria,
+.cardTurma {
+  display: flex;
   flex-wrap: wrap;
-  height: 250px;
-  width: 250px;
+  text-align: center;
+  font-weight: bold;
+}
+
+.cardMateria,
+.cardTurma,
+.cardAluno,
+.cardProfessor {
   background-color: #e2c5c5;
   border-radius: 10px;
-  padding: 12px;
-  margin: 10px 0;
+  padding: 20px;
+  margin: 10px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  width: 150px;
+  min-width: 150px;
+  height: 250px;
 }
 
+/* FOTO */
+.cardfoto {
+  width: 100px;
+  margin-top: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* FILTROS */
 .filtros-box {
   background-color: #ece0e5;
   padding: 20px;
@@ -423,11 +490,18 @@ body {
 }
 
 .filtro label {
-  font-weight: bold;
   margin-bottom: 4px;
+  font-weight: bold;
 }
 
 select {
   padding: 6px;
   border-radius: 5px;
+}
+
+/* GENÉRICO */
+.conteudoCardBranco {
+  background-color: white;
+  padding: 10px;
+  border-radius: 8px;
 }

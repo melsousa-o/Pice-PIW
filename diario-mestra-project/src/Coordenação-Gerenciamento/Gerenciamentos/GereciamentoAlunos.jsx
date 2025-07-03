@@ -9,6 +9,7 @@ function GerenciamentoAlunos() {
     cpf: "",
     responsavel: "",
     cpfResponsavel: "",
+    dataDeNascimento: "",
     foto: null,
   });
 
@@ -16,7 +17,6 @@ function GerenciamentoAlunos() {
 
   const adicionarAluno = () => {
     const nomeTrimado = novoAluno.nome.trim();
-
     if (
       nomeTrimado &&
       !alunos.some((a) => a.nome === nomeTrimado && a.cpf === novoAluno.cpf)
@@ -27,6 +27,7 @@ function GerenciamentoAlunos() {
         cpf: "",
         responsavel: "",
         cpfResponsavel: "",
+        dataDeNascimento: "",
         foto: null,
       });
       setMostrarPopup(false);
@@ -67,11 +68,11 @@ function GerenciamentoAlunos() {
 
           <div className="cardsContainer">
             {alunos.map((aluno, index) => (
-
               <div key={index} className="cardAluno">
                 <div className="conteudoCardBranco">
                   {aluno.foto && (
                     <img
+                      className="cardfoto"
                       src={aluno.foto}
                       alt="Foto do Aluno"
                     />
@@ -80,13 +81,14 @@ function GerenciamentoAlunos() {
                   <p>CPF: {aluno.cpf}</p>
                   <p>Responsável: {aluno.responsavel}</p>
                   <p>CPF: {aluno.cpfResponsavel}</p>
+                  <p>Data de Nascimento: {aluno.dataDeNascimento}</p>
                 </div>
               </div>
             ))}
           </div>
 
           {mostrarPopup && (
-            <div className="popup-overlay">
+            <div className="popupOverlay">
               <div className="popup">
                 <h3>Novo Aluno</h3>
 
@@ -118,26 +120,34 @@ function GerenciamentoAlunos() {
                   value={novoAluno.cpfResponsavel}
                   onChange={handleChange}
                 />
-
+                <input
+                  type="date"
+                  name="dataDeNascimento"
+                  value={novoAluno.dataDeNascimento}
+                  onChange={handleChange}
+                />
                 <input
                   type="file"
-                  accept="image"
+                  accept="image/*"
                   onChange={handleImagemChange}
                 />
 
                 {novoAluno.foto && (
-                  <img  className="cardfoto"
+                  <img
+                    className="cardfoto"
                     src={novoAluno.foto}
                     alt="Foto do Aluno"
                   />
                 )}
 
-                <div>
-                  <button className="botao" onClick={adicionarAluno}>
-                    Cadastrar
+                <div className="botoesPopup">
+                  <button
+                    className="botaoPopupCancelar"
+                    onClick={() => setMostrarPopup(false)}>
+                      Cancelar
                   </button>
-                  <button className="botao" onClick={() => setMostrarPopup(false)}>
-                    Cancelar
+                  <button className="botaoPopup" onClick={adicionarAluno}>
+                    Cadastrar
                   </button>
                 </div>
               </div>
