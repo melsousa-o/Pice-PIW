@@ -301,6 +301,21 @@ body {
   cursor: pointer;
 }
 
+.checkboxGroup {
+  display: flex;
+  flex-direction: column;
+  flex-flow: wrap;
+  justify-content: flex-start;
+  margin-top: 4px;
+}
+
+.checkboxItem {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+
 /* POPUP */
 .popupOverlay {
   position: fixed;

@@ -9,22 +9,45 @@ function GerenciamentoTurmas() {
   const [novaTurma, setNovaTurma] = useState({
     serie: "",
     periodo: "",
-    materias: "",
+    materias: [],
   });
+
+  const materiasDisponiveis = [
+    "Português",
+    "Matemática",
+    "História",
+    "Ciências",
+    "Geografia",
+  ];
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setNovaTurma({ ...novaTurma, [name]: value });
   };
 
+  const handleMateriaChange = (e) => {
+    const { value, checked } = e.target;
+    if (checked) {
+      setNovaTurma((prev) => ({
+        ...prev,
+        materias: [...prev.materias, value],
+      }));
+    } else {
+      setNovaTurma((prev) => ({
+        ...prev,
+        materias: prev.materias.filter((m) => m !== value),
+      }));
+    }
+  };
+
   const cadastrarTurma = () => {
     const { serie, periodo, materias } = novaTurma;
-    if (serie && periodo && materias) {
-      const nomeTurma = `${serie} - ${periodo} - ${materias}`;
+    if (serie && periodo && materias.length > 0) {
+      const nomeTurma = `${serie} - ${periodo} - ${materias.join(", ")}`;
       if (!turmas.includes(nomeTurma)) {
         setTurmas([...turmas, nomeTurma]);
         setMostrarPopup(false);
-        setNovaTurma({ serie: "", periodo: "", materias: "" });
+        setNovaTurma({ serie: "", periodo: "", materias: [] });
       }
     }
   };
@@ -32,7 +55,6 @@ function GerenciamentoTurmas() {
   return (
     <>
       <HeaderCoord />
-
       <div className="main-container">
         <div className="sidebar">
           <SidebarMenu />
@@ -62,32 +84,13 @@ function GerenciamentoTurmas() {
               <div className="formGrid">
                 <div className="filtro">
                   <label htmlFor="serie">Série</label>
-                  <select
+                  <input
+                    type="text"
                     name="serie"
-                    id="serie"
                     value={novaTurma.serie}
+                    placeholder="Escreva qual turma deseja cadastrar"
                     onChange={handleChange}
-                  >
-                    <option value="">Selecione</option>
-                    <option value="1º Ano">1º Ano</option>
-                    <option value="2º Ano">2º Ano</option>
-                    <option value="3º Ano">3º Ano</option>
-                  </select>
-                </div>
-
-                <div className="filtro">
-                  <label htmlFor="materias">Matéria</label>
-                  <select
-                    name="materias"
-                    id="materias"
-                    value={novaTurma.materias}
-                    onChange={handleChange}
-                  >
-                    <option value="">Selecione</option>
-                    <option value="Português">Português</option>
-                    <option value="Matemática">Matemática</option>
-                    <option value="História">História</option>
-                  </select>
+                  />
                 </div>
 
                 <div className="filtro">
@@ -102,6 +105,24 @@ function GerenciamentoTurmas() {
                     <option value="Manhã">Manhã</option>
                     <option value="Tarde">Tarde</option>
                   </select>
+                </div>
+
+                <div className="filtro">
+                  <label>Matérias</label>
+                  <div className="checkboxGroup">
+                    {materiasDisponiveis.map((materia) => (
+                      <div className="checkboxItem" key={materia}>
+                        <input
+                          type="checkbox"
+                          value={materia}
+                          checked={novaTurma.materias.includes(materia)}
+                          onChange={handleMateriaChange}
+                          id={`checkbox-${materia}`}
+                        />
+                        <label htmlFor={`checkbox-${materia}`}>{materia}</label>
+                      </div>
+                    ))}
+                  </div>
                 </div>
               </div>
 
