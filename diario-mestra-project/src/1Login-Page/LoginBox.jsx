@@ -1,4 +1,4 @@
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { useState } from 'react';
 
 function LoginBox() {
@@ -10,10 +10,6 @@ function LoginBox() {
     e.preventDefault();
     console.log('Login:', email, senha);
     navigate('/CompararLogin', { state: { email, senha } });
-  }
-
-  function irParaCadastro() {
-    navigate('/cadastro');
   }
 
   return (
@@ -40,11 +36,12 @@ function LoginBox() {
 
       <button type="submit">Entrar</button>
 
-      <a href="#">Esqueci minha senha</a>
-      <p onClick={irParaCadastro} style={{ cursor: 'pointer', color: 'yellow', marginTop: '10px' }}>
-        Primeiro acesso à coordenação
-      </p>
+      <div>
+        <p><Link to="/esquecisenha">Esqueci minha senha</Link></p>
+        <p><Link to="/cadastrocoord">Primeiro acesso à coordenação</Link></p>
+      </div>
     </form>
   );
 }
+
 export default LoginBox;

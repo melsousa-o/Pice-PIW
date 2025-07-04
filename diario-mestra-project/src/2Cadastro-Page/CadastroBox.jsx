@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useNavigate, Link } from 'react-router-dom';
 
 function CadastroBox() {
   const [nome, setNome] = useState('');

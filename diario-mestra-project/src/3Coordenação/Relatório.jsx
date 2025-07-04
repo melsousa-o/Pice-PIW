@@ -1,5 +1,6 @@
+import { useState } from "react";
 import HeaderCoord from "./1Componentes/HeaderCoordenação";
-import SidebarMenu from "./1Componentes/SidebarMenu";;
+import SidebarMenu from "./1Componentes/SidebarMenu";
 
 function Relatorios() {
   const [filtros, setFiltros] = useState({
@@ -15,7 +16,7 @@ function Relatorios() {
 
   const gerarRelatorio = () => {
     console.log("Filtros selecionados:", filtros);
-    // Aqui dá pra adicionar lógica de fetch, geração de PDF, etc.
+    // Aqui você pode adicionar a lógica de fetch, geração de PDF, etc.
   };
 
   return (
@@ -44,6 +45,7 @@ function Relatorios() {
                   onChange={handleChange}
                 >
                   <option value="">Selecione</option>
+                  {/* Adicione aqui suas opções de período */}
                 </select>
               </div>
 
@@ -56,7 +58,7 @@ function Relatorios() {
                   onChange={handleChange}
                 >
                   <option value="">Selecione</option>
-
+                  {/* Adicione aqui suas opções de turma */}
                 </select>
               </div>
 
@@ -69,7 +71,7 @@ function Relatorios() {
                   onChange={handleChange}
                 >
                   <option value="">Selecione</option>
-                 
+                  {/* Adicione aqui suas opções de matéria */}
                 </select>
               </div>
             </div>

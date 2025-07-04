@@ -3,6 +3,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
 import CompararLogin from './1Login-Page/CompararLogin';
 import LoginBox from './1Login-Page/LoginPage';
+import CadastroPage from './2Cadastro-Page/CadastroPage';
 
 import CoordTelaInicial from './3Coordenação/CoordTelaInicial';
 import CoordGerenciamento from './3Coordenação/CoordGerenciamento';
@@ -14,12 +15,14 @@ import GerenciamentoAlunos from './3Coordenação/GereciamentoAlunos';
 import Relatório from './3Coordenação/Relatório';
 import Mensagem from './3Coordenação/Mensagem';
 
+
 function App() {
   return (
     <BrowserRouter>
       <Routes>
-         <Route path="/" element={<LoginBox/>} />
-         <Route path="/CompararLogin" element={<CompararLogin/>} />
+        <Route path="/" element={<LoginBox/>} />
+        <Route path="/CompararLogin" element={<CompararLogin/>} />
+        <Route path="/cadastrocoord" element={<CadastroPage/>} />
         <Route path="/coord" element={<CoordTelaInicial/>} />
         <Route path="/gerenciamento" element={<CoordGerenciamento/>} />
         <Route path="/gerenciar-materias" element={<GerenciamentoMaterias/>} />
