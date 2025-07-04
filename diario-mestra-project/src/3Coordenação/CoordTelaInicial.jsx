@@ -1,5 +1,6 @@
 import HeaderCoord from "./1Componentes/HeaderCoordenação";
 import SidebarMenu from "./1Componentes/SidebarMenu";
+import Footer from "./1Componentes/Footer";
 import Calendar from "react-calendar";
 import 'react-calendar/dist/Calendar.css';
 import { useState } from 'react';
@@ -10,6 +11,8 @@ function CoordTelaInicial() {
   return (
     <>
       <HeaderCoord />
+
+      <Footer/>
 
       <div className="main-container">
         <SidebarMenu />
