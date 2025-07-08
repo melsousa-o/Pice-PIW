@@ -1,3 +1,6 @@
+# Dependências (npm/yarn)
+node_modules/
+
 # Logs
 logs
 *.log
