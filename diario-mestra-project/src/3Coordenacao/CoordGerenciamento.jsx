@@ -1,4 +1,4 @@
-import HeaderCoord from "./1Componentes/HeaderCoordenação";
+import HeaderCoord from "./1Componentes/HeaderCoordenacao";
 import SidebarMenu from "./1Componentes/SidebarMenu";
 import { Link } from "react-router-dom";
 

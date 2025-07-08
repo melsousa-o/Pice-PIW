@@ -4,15 +4,15 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import LoginBox from './1Login-Page/LoginPage';
 import CadastroPage from './2Cadastro-Page/CadastroPage';
 
-import CoordTelaInicial from './3Coordenação/CoordTelaInicial';
-import CoordGerenciamento from './3Coordenação/CoordGerenciamento';
-import GerenciamentoMaterias from './3Coordenação/GerenciamentoMaterias';
-import GerenciamentoTurmas from './3Coordenação/GerenciamentoTurmas';
-import GerenciamentoProfessores from './3Coordenação/GerenciamentoProfessores';
-import GerenciamentoAlunos from './3Coordenação/GereciamentoAlunos';
+import CoordTelaInicial from './3Coordenacao/CoordTelaInicial';
+import CoordGerenciamento from './3Coordenacao/CoordGerenciamento';
+import GerenciamentoMaterias from './3Coordenacao/GerenciamentoMaterias';
+import GerenciamentoTurmas from './3Coordenacao/GerenciamentoTurmas';
+import GerenciamentoProfessores from './3Coordenacao/GerenciamentoProfessores';
+import GerenciamentoAlunos from './3Coordenacao/GereciamentoAlunos';
 
-import Relatório from './3Coordenação/Relatório';
-import Mensagem from './3Coordenação/Mensagem';
+import Relatório from './3Coordenacao/Relatorio';
+import Mensagem from './3Coordenacao/Mensagem';
 
 
 function App() {
