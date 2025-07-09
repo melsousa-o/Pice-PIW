@@ -12,34 +12,34 @@ function CadastroBox() {
     foto: null,
   });
 
-  const [previewFoto, setPreviewFoto] = useState(null);
+  const [previewFoto, setPreviewFoto] = useState(null); //eatado p preview da foto antes do upload
 
   function handleChange(e) {
     const { name, value, files } = e.target;
 
-    if (name === 'foto') {
-      const file = files[0];
-      setFormData((prev) => ({ ...prev, foto: file }));
-      setPreviewFoto(URL.createObjectURL(file));
-    } else {
-      setFormData((prev) => ({ ...prev, [name]: value }));
+    if (name === 'foto') { //se for uma imagem
+      const file = files[0]; //files[0] pega o primeiro arquivo selecionado
+      setFormData((prev) => ({ ...prev, foto: file })); //salva
+      setPreviewFoto(URL.createObjectURL(file)); //cria uma url temporaria p mostrar a previa
+    } else { //se for outro campo
+      setFormData((prev) => ({ ...prev, [name]: value })); //atualiza o campo correspondente (nome, email senha...)
     }
   }
 
   async function handleCadastro(e) {
-    e.preventDefault();
+    e.preventDefault(); //impede recarregar a pag quando envia o formulario
 
-    if (formData.senha.length < 5) {
-      alert('A senha precisa ter no mínimo 5 caracteres');
+    if (formData.senha.length < 5) { //funcao de validar senha
+      alert('A senha precisa ter no mínimo 6 caracteres.'); //6 pq começa com 0
       return;
     }
 
-    if (formData.senha !== formData.confirmar) {
-      alert('As senhas devem ser iguais');
+    if (formData.senha !== formData.confirmar) { //compara as senhas
+      alert('As senhas devem ser iguais.');
       return;
     }
 
-    try {
+    try { //criação do usuario com email e senha
       const userCredential = await createUserWithEmailAndPassword(
         auth,
         formData.email,
@@ -49,12 +49,12 @@ function CadastroBox() {
       let fotoURL = null;
 
       if (formData.foto) {
-        const storageRef = ref(storage, `fotosPerfis/${userCredential.user.uid}`);
+        const storageRef = ref(storage, `fotosPerfis/${userCredential.user.uid}`); //cria uma referencia no storage com o uid do usuario
         await uploadBytes(storageRef, formData.foto);
-        fotoURL = await getDownloadURL(storageRef);
+        fotoURL = await getDownloadURL(storageRef); //pega a url da foto depois do upload
       }
 
-      await updateProfile(userCredential.user, {
+      await updateProfile(userCredential.user, { //add o nome a url da foto ao perfil do usuario no banco de dados
         displayName: formData.nome,
         photoURL: fotoURL,
       });
@@ -82,34 +82,69 @@ function CadastroBox() {
     <form className="login-box" onSubmit={handleCadastro}>
       <label>
         Nome completo
-        <input type="text" name="nome" value={formData.nome} onChange={handleChange} required />
+        <input
+        type="text"
+        name="nome"
+        value={formData.nome} //liga o valor do input ao estado
+        onChange={handleChange} //atualiza o valor ao digitar com handleChange
+        required //obriga o preenchimento do campo
+        />
       </label>
 
       <label>
         E-mail
-        <input type="email" name="email" value={formData.email} onChange={handleChange} required />
+        <input
+        type="email"
+        name="email"
+        value={formData.email}
+        onChange={handleChange}
+        required
+        />
       </label>
 
       <label>
         Senha
-        <input type="password" name="senha" value={formData.senha} onChange={handleChange} required />
+        <input
+        type="password"
+        name="senha"
+        value={formData.senha}
+        onChange={handleChange}
+        required
+        />
       </label>
 
       <label>
         Confirmar senha
-        <input type="password" name="confirmar" value={formData.confirmar} onChange={handleChange} required />
+        <input
+        type="password"
+        name="confirmar"
+        value={formData.confirmar}
+        onChange={handleChange}
+        required
+        />
       </label>
 
       <label>
         Foto de perfil
-        <input type="file" name="foto" accept="image/*" onChange={handleChange} />
+        <input
+        type="file"
+        name="foto"
+        accept="image/*"
+        onChange={handleChange}
+        />
       </label>
 
       {previewFoto && (
         <img
           src={previewFoto}
           alt="Pré-visualização"
-          style={{ width: '100px', height: '100px', objectFit: 'cover', borderRadius: '8px', marginTop: '8px' }}
+          style={{
+            width: '100px',
+            height: '100px',
+            objectFit: 'cover',
+            borderRadius: '8px',
+            marginTop: '8px'
+          }}
         />
       )}
 
