@@ -1,9 +1,12 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom'; // para redirecionar
 import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
-import { auth, storage } from '../firebase';
+import { auth, storage, db } from '../firebase';
+import { setDoc, doc } from 'firebase/firestore';
 
 function CadastroBox() {
+  const navigate = useNavigate(); // hook de navegação
   const [formData, setFormData] = useState({
     nome: '',
     email: '',
@@ -12,34 +15,43 @@ function CadastroBox() {
     foto: null,
   });
 
-  const [previewFoto, setPreviewFoto] = useState(null); //eatado p preview da foto antes do upload
+  const [previewFoto, setPreviewFoto] = useState(null);
+  const [tipo, setTipo] = useState('');
+  const [carregando, setCarregando] = useState(false); // para mostrar carregamento
 
   function handleChange(e) {
     const { name, value, files } = e.target;
 
-    if (name === 'foto') { //se for uma imagem
-      const file = files[0]; //files[0] pega o primeiro arquivo selecionado
-      setFormData((prev) => ({ ...prev, foto: file })); //salva
-      setPreviewFoto(URL.createObjectURL(file)); //cria uma url temporaria p mostrar a previa
-    } else { //se for outro campo
-      setFormData((prev) => ({ ...prev, [name]: value })); //atualiza o campo correspondente (nome, email senha...)
+    if (name === 'foto') {
+      const file = files[0];
+      setFormData((prev) => ({ ...prev, foto: file }));
+      setPreviewFoto(URL.createObjectURL(file));
+    } else {
+      setFormData((prev) => ({ ...prev, [name]: value }));
     }
   }
 
   async function handleCadastro(e) {
-    e.preventDefault(); //impede recarregar a pag quando envia o formulario
+    e.preventDefault();
 
-    if (formData.senha.length < 5) { //funcao de validar senha
-      alert('A senha precisa ter no mínimo 6 caracteres.'); //6 pq começa com 0
+    if (formData.senha.length < 6) {
+      alert('A senha precisa ter no mínimo 6 caracteres.');
       return;
     }
 
-    if (formData.senha !== formData.confirmar) { //compara as senhas
+    if (formData.senha !== formData.confirmar) {
       alert('As senhas devem ser iguais.');
       return;
     }
 
-    try { //criação do usuario com email e senha
+    if (!tipo) {
+      alert('Por favor, selecione o tipo de usuário.');
+      return;
+    }
+
+    try {
+      setCarregando(true); // inicia carregamento
+
       const userCredential = await createUserWithEmailAndPassword(
         auth,
         formData.email,
@@ -49,20 +61,36 @@ function CadastroBox() {
       let fotoURL = null;
 
       if (formData.foto) {
-        const storageRef = ref(storage, `fotosPerfis/${userCredential.user.uid}`); //cria uma referencia no storage com o uid do usuario
+        const storageRef = ref(storage, `fotosPerfis/${userCredential.user.uid}`);
         await uploadBytes(storageRef, formData.foto);
-        fotoURL = await getDownloadURL(storageRef); //pega a url da foto depois do upload
+        fotoURL = await getDownloadURL(storageRef);
       }
 
-      await updateProfile(userCredential.user, { //add o nome a url da foto ao perfil do usuario no banco de dados
+      await updateProfile(userCredential.user, {
         displayName: formData.nome,
         photoURL: fotoURL,
       });
 
-      alert('Usuário cadastrado com sucesso!');
-      console.log('Usuário:', userCredential.user);
+      await setDoc(doc(db, 'usuarios', userCredential.user.uid), {
+        uid: userCredential.user.uid,
+        nome: formData.nome,
+        email: formData.email,
+        tipo: tipo,
+        fotoURL: fotoURL,
+      });
 
-      // Reset do formulário
+      alert('Usuário cadastrado com sucesso!');
+
+      // Redirecionar com base no tipo
+      if (tipo === 'coordenador') {
+        navigate('/coord-inicio');
+      } else if (tipo === 'professor') {
+        navigate('/professor-inicio');
+      } else if (tipo === 'responsavel') {
+        navigate('/responsavel-inicio');
+      }
+
+      // Limpa os campos
       setFormData({
         nome: '',
         email: '',
@@ -71,10 +99,12 @@ function CadastroBox() {
         foto: null,
       });
       setPreviewFoto(null);
-
+      setTipo('');
     } catch (error) {
       console.error('Erro no cadastro:', error.code, error.message);
       alert('Erro: ' + error.message);
+    } finally {
+      setCarregando(false); // encerra carregamento
     }
   }
 
@@ -83,54 +113,54 @@ function CadastroBox() {
       <label>
         Nome completo
         <input
-        type="text"
-        name="nome"
-        value={formData.nome} //liga o valor do input ao estado
-        onChange={handleChange} //atualiza o valor ao digitar com handleChange
-        required //obriga o preenchimento do campo
+          type="text"
+          name="nome"
+          value={formData.nome}
+          onChange={handleChange}
+          required
         />
       </label>
 
       <label>
         E-mail
         <input
-        type="email"
-        name="email"
-        value={formData.email}
-        onChange={handleChange}
-        required
+          type="email"
+          name="email"
+          value={formData.email}
+          onChange={handleChange}
+          required
         />
       </label>
 
       <label>
         Senha
         <input
-        type="password"
-        name="senha"
-        value={formData.senha}
-        onChange={handleChange}
-        required
+          type="password"
+          name="senha"
+          value={formData.senha}
+          onChange={handleChange}
+          required
         />
       </label>
 
       <label>
         Confirmar senha
         <input
-        type="password"
-        name="confirmar"
-        value={formData.confirmar}
-        onChange={handleChange}
-        required
+          type="password"
+          name="confirmar"
+          value={formData.confirmar}
+          onChange={handleChange}
+          required
         />
       </label>
 
       <label>
         Foto de perfil
         <input
-        type="file"
-        name="foto"
-        accept="image/*"
-        onChange={handleChange}
+          type="file"
+          name="foto"
+          accept="image/*"
+          onChange={handleChange}
         />
       </label>
 
@@ -143,12 +173,24 @@ function CadastroBox() {
             height: '100px',
             objectFit: 'cover',
             borderRadius: '8px',
-            marginTop: '8px'
+            marginTop: '8px',
           }}
         />
       )}
 
-      <button type="submit">Cadastrar</button>
+      <label>
+        Tipo de usuário:
+        <select value={tipo} onChange={(e) => setTipo(e.target.value)} required>
+          <option value="">Selecione</option>
+          <option value="coordenador">Coordenação</option>
+          <option value="professor">Professor(a)</option>
+          <option value="responsavel">Responsável</option>
+        </select>
+      </label>
+
+      <button type="submit" disabled={carregando}>
+        {carregando ? 'Cadastrando...' : 'Cadastrar'}
+      </button>
     </form>
   );
 }

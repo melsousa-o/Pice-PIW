@@ -1,4 +1,3 @@
-
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
 import LoginBox from './1Login-Page/LoginPage';
@@ -14,22 +13,26 @@ import GerenciamentoAlunos from './3Coordenacao/GereciamentoAlunos';
 import Relatório from './3Coordenacao/Relatorio';
 import Mensagem from './3Coordenacao/Mensagem';
 
+import ProfessorTelaInicial from './4Professor/ProfessorTelaInicial';
+import ResponsavelTelaInicial from './5Responsavel/ResponsavelTelaInicial';
 
 function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<LoginBox/>} />
-        <Route path="/cadastrocoord" element={<CadastroPage/>} />
-        <Route path="/coord" element={<CoordTelaInicial/>} />
-        <Route path="/gerenciamento" element={<CoordGerenciamento/>} />
-        <Route path="/gerenciar-materias" element={<GerenciamentoMaterias/>} />
-        <Route path="/gerenciar-turmas" element={<GerenciamentoTurmas/>} />
-        <Route path="/gerenciar-alunos" element={<GerenciamentoAlunos/>} />
-        <Route path="/gerenciar-professores" element={<GerenciamentoProfessores/>} />
-        <Route path="/relatorio" element={<Relatório/>} />
-        <Route path="/mensagem" element={<Mensagem/>} />
+        <Route path="/" element={<LoginBox />} />
+        <Route path="/cadastrocoord" element={<CadastroPage />} />
+        <Route path="/coord" element={<CoordTelaInicial />} />
+        <Route path="/gerenciamento" element={<CoordGerenciamento />} />
+        <Route path="/gerenciar-materias" element={<GerenciamentoMaterias />} />
+        <Route path="/gerenciar-turmas" element={<GerenciamentoTurmas />} />
+        <Route path="/gerenciar-alunos" element={<GerenciamentoAlunos />} />
+        <Route path="/gerenciar-professores" element={<GerenciamentoProfessores />} />
+        <Route path="/relatorio" element={<Relatório />} />
+        <Route path="/mensagem" element={<Mensagem />} />
 
+        <Route path="/professor-inicio" element={<ProfessorTelaInicial />} />
+        <Route path="/responsavel-inicio" element={<ResponsavelTelaInicial />} />
       </Routes>
     </BrowserRouter>
   );
