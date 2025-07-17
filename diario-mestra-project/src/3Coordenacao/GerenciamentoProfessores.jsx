@@ -204,8 +204,21 @@ function GerenciamentoProfessores() {
                   <p>CPF: {prof.cpf}</p>
                   <p>Email: {prof.email}</p>
                   <p>Data de Nascimento: {prof.dataDeNascimento}</p>
-                  <p>Matérias: {prof.materias?.join(', ') || 'Nenhuma'}</p>
-                  <p>Turmas: {prof.turmas?.join(', ') || 'Nenhuma'}</p>
+                  <p> Matérias: {
+                  prof.materias?.map(id =>
+                    materiasDisponiveis.find(m => m.id === id)?.nome || id
+                  ).join(', ') || 'Nenhuma'
+                }
+                </p>
+                <p>
+                  Turmas: {
+                    prof.turmas?.map(id => {
+                      const turma = turmasDisponiveis.find(t => t.id === id);
+                      return turma ? `${turma.serie} - ${turma.periodo}` : id;
+                    }).join(', ') || 'Nenhuma'
+                  }
+                </p>
+
                   <button className="botaoPopup" onClick={() => editarProfessor(prof)}>Editar</button>
                   <button className="botaoPopupCancelar" onClick={() => excluirProfessor(prof.id)}>Excluir</button>
                 </div>
