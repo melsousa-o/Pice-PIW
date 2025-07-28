@@ -32,12 +32,18 @@ function LoginBox() {
     const snap = await get(dbRef(database, `usuarios/${user.uid}`));
     if (!snap.exists()) throw new Error('Usuário não cadastrado no sistema.');
 
+    localStorage.setItem('userData',JSON.stringify({
+      uid: user.uid,
+      nome: snap.val().nome,
+    }))
+
     const { perfil } = snap.val();
     const rotas = {
       coordenacao: '/coord',
       professor: '/professor',
       responsavel: '/responsavel',
     };
+
     navigate(rotas[perfil] ?? '/');
   } catch (error) {
     console.error('Erro de login:', error);

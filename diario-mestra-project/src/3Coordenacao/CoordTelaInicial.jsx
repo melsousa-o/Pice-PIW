@@ -3,10 +3,31 @@ import SidebarMenu from "./1Componentes/SidebarMenu";
 import Footer from "./1Componentes/Footer";
 import Calendar from "react-calendar";
 import 'react-calendar/dist/Calendar.css';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { auth } from '../firebase';
+import { getDatabase } from "firebase/database";
 
 function CoordTelaInicial() {
   const [data, setData] = useState(new Date());
+  const [nomeUsuario, setNomeUsuario] = useState(''); 
+
+  useEffect(() => {
+    const savedData = JSON.parse(localStorage.getItem('userData'));
+    if (savedData?.nome) {
+      setNomeUsuario(savedData.nome.split(' ')[0]); // Pega o primeiro nome
+      return;
+    }
+
+    const user = auth.currentUser;
+    if (user) {
+      const db = getDatabase();
+      get(ref(db, `usuarios/${user.uid}`)).then((snapshot) => {
+        if (snapshot.exists()) {
+          setNomeUsuario(snapshot.val().nome.split(' ')[0]); // Pega o primeiro nome
+        }
+      }).catch(console.error);
+    }
+  }, []);
 
   return (
     <>
@@ -18,7 +39,7 @@ function CoordTelaInicial() {
         <SidebarMenu />
 
         <main className="content">
-          <h2>Bem-Vinda Fulana</h2>
+          <h2>Bem-Vinda {nomeUsuario || 'Usuário'}</h2>
 
           <div className="cardsResumo">
             <div className="cardResumo">
