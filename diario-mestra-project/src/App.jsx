@@ -1,3 +1,4 @@
+import React, { useEffect } from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import ProtectedRoute from './1Login-Page/ProtectRoute';
 
@@ -13,8 +14,16 @@ import GerenciamentoAlunos from './3Coordenacao/GereciamentoAlunos';
 
 import Relatorio from './3Coordenacao/Relatorio';
 import Mensagem from './3Coordenacao/Mensagem';
+import CoordConfigPage from './3Coordenacao/CoordConfigPage';
 
 function App() {
+   useEffect(() => {
+    const temaSalvo = localStorage.getItem('tema');
+    if (temaSalvo === 'dark') {
+      document.body.classList.add('tema-escuro');
+    }
+  }, []);
+  
   return (
     <BrowserRouter>
       <Routes>
@@ -68,6 +77,12 @@ function App() {
         <Route path="/mensagem" element={
           <ProtectedRoute allowedProfiles={['coordenacao']}>
             <Mensagem />
+          </ProtectedRoute>
+        } />
+
+        <Route path="/configuracoes" element={
+          <ProtectedRoute allowedProfiles={['coordenacao']}>
+            <CoordConfigPage />
           </ProtectedRoute>
         } />
 

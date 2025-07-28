@@ -654,3 +654,24 @@ select {
     flex-direction: column;
   }
 }
+
+body.tema-escuro {
+  background-color: #1a1a1a;
+  color: #f0f0f0;
+}
+
+.tema-escuro .content,
+.tema-escuro .popup,
+.tema-escuro .sidebar,
+.tema-escuro .login-box {
+  background-color: #2a2a2a;
+  color: #f0f0f0;
+}
+
+.tema-escuro input,
+.tema-escuro textarea,
+.tema-escuro select {
+  background-color: #333;
+  color: #f0f0f0;
+  border-color: #555;
+}

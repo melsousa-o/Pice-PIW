@@ -151,3 +151,166 @@
   gap: 10px;
   margin-top: 20px;
 }
+
+/* ============== Config telas ============== */
+.config-page {
+  padding: 20px;
+}
+
+.config-page h2 {
+  margin-bottom: 20px;
+  color: var(--vinho);
+}
+
+.config-container {
+  display: flex;
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  overflow: hidden;
+}
+
+.config-actions-column {
+  width: 250px;
+  padding: 30px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: var(--cinza-claríssimo);
+  gap: 15px;
+}
+
+.profile-preview {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid var(--vinho);
+  margin-bottom: 10px;
+}
+
+.action-btn {
+  width: 100%;
+  padding: 12px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: all 0.3s;
+  text-align: center;
+  color: white;
+  background: var(--vinho);
+}
+
+.action-btn:hover {
+  background: var(--vinho-claro);
+  transform: translateY(-2px);
+}
+
+.file-input-btn {
+  position: relative;
+  overflow: hidden;
+}
+
+.file-input {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.hidden {
+  display: none;
+}
+
+.divider {
+  width: 1px;
+  background: var(--cinza);
+}
+
+.data-form {
+  flex: 1;
+  padding: 30px;
+}
+
+.form-row {
+  display: flex;
+  gap: 30px;
+  margin-bottom: 20px;
+}
+
+.input-group {
+  flex: 1;
+}
+
+.input-group label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: bold;
+  color: var(--vinho);
+}
+
+.input-group input,
+.input-group textarea {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid var(--cinza);
+  border-radius: 5px;
+  font-family: 'Poppins', sans-serif;
+}
+
+.input-group textarea {
+  min-height: 120px;
+  resize: vertical;
+}
+
+.input-group input:disabled,
+.input-group textarea:disabled {
+  background: #f9f9f9;
+  color: #666;
+  border-color: #e0e0e0;
+}
+
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 20px;
+}
+
+.save-btn {
+  padding: 12px 25px;
+  background: var(--vinho);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: all 0.3s;
+}
+
+.save-btn:hover {
+  background: var(--vinho-claro);
+  transform: translateY(-2px);
+}
+
+.tema-escuro .config-container,
+.tema-escuro .config-actions-column {
+  background: #333;
+  color: #fff;
+}
+
+.tema-escuro .input-group input,
+.tema-escuro .input-group textarea {
+  background: #444;
+  color: #fff;
+  border-color: #555;
+}
+
+.tema-escuro .input-group input:disabled,
+.tema-escuro .input-group textarea:disabled {
+  background: #333;
+  color: #aaa;
+}
