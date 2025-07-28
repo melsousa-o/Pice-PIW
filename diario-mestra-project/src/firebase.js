@@ -10,7 +10,7 @@ const firebaseConfig = {
   authDomain: "diariomestra.firebaseapp.com",
   databaseURL: "https://diariomestra-default-rtdb.firebaseio.com",
   projectId: "diariomestra",
-  storageBucket: "diariomestra.appspot.com",
+  storageBucket: "diariomestra.firebasestorage.app",
   messagingSenderId: "82975937066",
   appId: "1:82975937066:web:f33626aafabb9cc21d6953",
   measurementId: "G-LT6NL075DN"
