@@ -614,3 +614,23 @@ body.tema-escuro {
   color: #f0f0f0;
   border-color: #555;
 }
+
+/* profffff */
+.secao-disciplinas {
+  margin-top: 2rem;
+}
+
+.disciplinas-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.card-disciplina {
+  background-color: #f8f8ff;
+  border-left: 5px solid #6c63ff;
+  padding: 1rem;
+  border-radius: 8px;
+  width: 250px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}

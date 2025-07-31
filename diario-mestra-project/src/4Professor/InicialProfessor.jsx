@@ -5,7 +5,9 @@ import Calendar from "react-calendar";
 import 'react-calendar/dist/Calendar.css';
 import { useState, useEffect } from 'react';
 import { auth } from '../firebase';
-import { doc, getDoc } from 'firebase/firestore';
+import { doc, getDoc, collection } from 'firebase/firestore';
+import { db } from '../firebase';
+
 
 function ProfTelaInicial () {
   const [data, setData] = useState(new Date()); 
@@ -28,13 +30,33 @@ function ProfTelaInicial () {
     }
   }, []);
 
+  const [disciplinas, setDisciplinas] = useState([]);
 
-  // Dados simulados das aulas do dia
-  const aulasHoje = [
-    { materia: 'Matemática', turma: '1º série', horario: '08:00 - 11:00', marcada: true },
-    { materia: 'Matemática', turma: '6º série', horario: '12:00 - 14:00', marcada: false },
-    { materia: 'Matemática', turma: '8º série', horario: '15:00 - 17:00', marcada: false },
-  ];
+useEffect(() => {
+  const buscarDisciplinas = async () => {
+    try {
+      const snapshot = await getDocs(collection(db, 'materias'));
+      const lista = snapshot.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data()
+      }));
+      setDisciplinas(lista);
+    } catch (error) {
+      console.error("Erro ao buscar disciplinas:", error);
+    }
+  };
+
+  buscarDisciplinas();
+}, []);
+
+
+
+  // // Dados simulados das aulas do dia
+  // const aulasHoje = [
+  //   { materia: 'Matemática', turma: '1º série', horario: '08:00 - 11:00', marcada: true },
+  //   { materia: 'Matemática', turma: '6º série', horario: '12:00 - 14:00', marcada: false },
+  //   { materia: 'Matemática', turma: '8º série', horario: '15:00 - 17:00', marcada: false },
+  // ];
 
   return (
     <>
@@ -47,23 +69,23 @@ function ProfTelaInicial () {
         <main className="content">
           <h2>Bem-vinda, {nomeUsuario}</h2>
 
-          <section className="secao-aulas">
-            <h3>Suas aulas de hoje:</h3>
-            <div className="aulasProf">
-              {aulasHoje.map((aula, index) => (
-                <div className="card-aula" key={index}>
-                  <h4>{aula.materia}</h4>
-                  <p>{aula.turma}</p>
-                  <p>{aula.horario}</p>
-                  {aula.marcada ? (
-                    <span className="icone-marcado">✅</span>
-                  ) : (
-                    <span className="icone-a-marca">📋</span>
-                  )}
-                </div>
-              ))}
-            </div>
-          </section>
+         <section className="secao-disciplinas">
+  <h3>Disciplinas</h3>
+  <div className="disciplinas-container">
+    {disciplinas.length > 0 ? (
+      disciplinas.map((disciplina) => (
+        <div key={disciplina.id} className="card-disciplina">
+          <h4>{disciplina.nome}</h4>
+          <p><strong>Código:</strong> {disciplina.codigo}</p>
+          <p>{disciplina.descricao}</p>
+        </div>
+      ))
+    ) : (
+      <p>Nenhuma disciplina encontrada.</p>
+    )}
+  </div>
+</section>
+
 
           <section className="secao-eventos">
             <h3>Eventos</h3>
@@ -71,6 +93,24 @@ function ProfTelaInicial () {
               <p>Nenhum evento marcado para hoje.</p>
             </div>
           </section>
+
+              <section className="secao-disciplinas">
+  <h3>Disciplinas Cadastradas</h3>
+  <div className="disciplinas-container">
+    {disciplinas.length > 0 ? (
+      disciplinas.map((disciplina) => (
+        <div className="card-disciplina" key={disciplina.id}>
+          <h4>{disciplina.nome}</h4>
+          <p><strong>Código:</strong> {disciplina.codigo}</p>
+          <p>{disciplina.descricao}</p>
+        </div>
+      ))
+    ) : (
+      <p>Nenhuma disciplina cadastrada.</p>
+    )}
+  </div>
+</section>
+
 
           <section className="secao-calendario">
             <h3>Calendário</h3>
