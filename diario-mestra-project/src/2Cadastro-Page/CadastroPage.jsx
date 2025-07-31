@@ -1,5 +1,6 @@
 import CadastroHeader from './CadastroHeader';
 import CadastroBox from './CadastroBox';
+import '../1Login-Page/Login.css';
 
 function CadastroPage() {
   return (

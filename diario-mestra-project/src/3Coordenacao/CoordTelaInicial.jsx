@@ -5,25 +5,25 @@ import Calendar from "react-calendar";
 import 'react-calendar/dist/Calendar.css';
 import { useState, useEffect } from 'react';
 import { auth } from '../firebase';
-import { getDatabase } from "firebase/database";
+import { doc, getDoc } from 'firebase/firestore';
+import { db } from '../firebase';
 
 function CoordTelaInicial() {
   const [data, setData] = useState(new Date());
-  const [nomeUsuario, setNomeUsuario] = useState(''); 
+  const [nomeUsuario, setNomeUsuario] = useState('');
 
   useEffect(() => {
     const savedData = JSON.parse(localStorage.getItem('userData'));
     if (savedData?.nome) {
-      setNomeUsuario(savedData.nome.split(' ')[0]); // Pega o primeiro nome
+      setNomeUsuario(savedData.nome.split(' ')[0]);
       return;
     }
 
     const user = auth.currentUser;
     if (user) {
-      const db = getDatabase();
-      get(ref(db, `usuarios/${user.uid}`)).then((snapshot) => {
-        if (snapshot.exists()) {
-          setNomeUsuario(snapshot.val().nome.split(' ')[0]); // Pega o primeiro nome
+      getDoc(doc(db, "usuarios", user.uid)).then((doc) => {
+        if (doc.exists()) {
+          setNomeUsuario(doc.data().nome.split(' ')[0]);
         }
       }).catch(console.error);
     }
@@ -32,7 +32,6 @@ function CoordTelaInicial() {
   return (
     <>
       <HeaderCoord />
-
       <Footer/>
 
       <div className="main-container">

@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { auth } from '../firebase';
-import { getDatabase, ref, get } from 'firebase/database';
+import { doc, getDoc } from 'firebase/firestore';
+import { db } from '../firebase';
 
 function ProtectedRoute({ children, allowedProfiles }) {
   const navigate = useNavigate();
@@ -18,17 +19,14 @@ function ProtectedRoute({ children, allowedProfiles }) {
 
       if (allowedProfiles) {
         try {
-          const db = getDatabase();
-          const userRef = ref(db, `usuarios/${user.uid}`);
-          const snapshot = await get(userRef);
-
-          if (!snapshot.exists() || !allowedProfiles.includes(snapshot.val().perfil)) {
+          const userDoc = await getDoc(doc(db, "usuarios", user.uid));
+          
+          if (!userDoc.exists() || !allowedProfiles.includes(userDoc.data().tipo)) {
             navigate('/acesso-negado');
             return;
           }
-
         } catch (err) {
-          console.error("Erro ao verificar perfil:", err);
+          console.error("Erro ao verificar tipo de usuário:", err);
           navigate('/erro');
           return;
         }

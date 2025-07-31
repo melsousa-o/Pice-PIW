@@ -1,8 +1,9 @@
+import '../1Login-Page/Login.css';
 import { useState } from 'react';
 import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
 import { ref as storageRef, uploadBytes, getDownloadURL } from 'firebase/storage';
-import { ref as dbRef, set } from 'firebase/database';
-import { auth, storage, database } from "../firebase";
+import { doc, setDoc } from 'firebase/firestore';
+import { auth, storage, db } from "../firebase";
 
 function CadastroBox() {
   const [formData, setFormData] = useState({
@@ -24,7 +25,6 @@ function CadastroBox() {
       setFormData((prev) => ({ ...prev, foto: file }));
       setPreviewFoto(URL.createObjectURL(file));
     } else if (name === 'cpf') {
-      // Remove tudo que não é número (opcional, para garantir só números)
       const onlyNums = value.replace(/\D/g, '');
       setFormData((prev) => ({ ...prev, cpf: onlyNums }));
     } else {
@@ -35,7 +35,6 @@ function CadastroBox() {
   async function handleCadastro(e) {
     e.preventDefault();
 
-    // Validação de senha
     if (formData.senha.length < 5) {
       alert('A senha precisa ter no mínimo 5 caracteres');
       return;
@@ -46,14 +45,12 @@ function CadastroBox() {
       return;
     }
 
-    // Validação de CPF
     if (!/^\d{11}$/.test(formData.cpf)) {
       alert('O CPF deve conter exatamente 11 números.');
       return;
     }
 
     try {
-      // Criação no Auth
       const userCredential = await createUserWithEmailAndPassword(
         auth,
         formData.email,
@@ -61,33 +58,32 @@ function CadastroBox() {
       );
 
       let fotoURL = null;
-
-      // Upload da imagem de perfil (se existir)
       if (formData.foto) {
         const refImagem = storageRef(storage, `fotosPerfis/${userCredential.user.uid}`);
         await uploadBytes(refImagem, formData.foto);
         fotoURL = await getDownloadURL(refImagem);
       }
 
-      // Atualiza o nome e foto no Firebase Auth
       await updateProfile(userCredential.user, {
         displayName: formData.nome,
         photoURL: fotoURL,
       });
 
-      // Salva no Realtime Database
-      await set(dbRef(database, 'usuarios/' + userCredential.user.uid), {
+      await setDoc(doc(db, "usuarios", userCredential.user.uid), {
         nome: formData.nome,
         email: formData.email,
         cpf: formData.cpf,
-        perfil: 'coordenacao',
-        fotoURL: fotoURL || null
+        tipo: 'coordenacao',
+        fotoURL: fotoURL || null,
+        criadoEm: new Date().toISOString(),
+        permissoes: {
+          acessoCoordenacao: true,
+          acessoProfessor: false,
+          acessoResponsavel: false
+        }
       });
 
       alert('Usuário cadastrado com sucesso!');
-      console.log('Usuário:', userCredential.user);
-
-      // Reset do formulário
       setFormData({
         nome: '',
         email: '',
@@ -99,7 +95,7 @@ function CadastroBox() {
       setPreviewFoto(null);
 
     } catch (error) {
-      console.error('Erro no cadastro:', error.code, error.message);
+      console.error('Erro no cadastro:', error);
       alert('Erro: ' + error.message);
     }
   }

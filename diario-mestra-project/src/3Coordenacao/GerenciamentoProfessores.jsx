@@ -1,7 +1,7 @@
 import HeaderCoord from "./1Componentes/HeaderCoordenacao";
 import SidebarMenu from "./1Componentes/SidebarMenu";
 import { useState, useEffect } from 'react';
-import { collection, addDoc, getDocs, deleteDoc, updateDoc, doc } from "firebase/firestore";
+import { collection, addDoc, getDocs, deleteDoc, updateDoc, doc, setDoc } from "firebase/firestore";
 import { db, auth } from "../firebase";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 
@@ -23,55 +23,65 @@ function GerenciamentoProfessores() {
   const [professorEditandoId, setProfessorEditandoId] = useState(null);
 
   useEffect(() => {
-    const buscarProfessores = async () => {
+    const buscarDados = async () => {
       try {
-        const snapshot = await getDocs(collection(db, "professores"));
-        const lista = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-        setProfessores(lista);
+        // Busca professores
+        const professoresSnapshot = await getDocs(collection(db, "professores"));
+        const listaProfessores = professoresSnapshot.docs.map(doc => ({ 
+          id: doc.id, 
+          ...doc.data() 
+        }));
+        setProfessores(listaProfessores);
+
+        // Busca matérias
+        const materiasSnapshot = await getDocs(collection(db, "materias"));
+        setMateriasDisponiveis(materiasSnapshot.docs.map(doc => ({ 
+          id: doc.id, 
+          ...doc.data() 
+        })));
+
+        // Busca turmas
+        const turmasSnapshot = await getDocs(collection(db, "turmas"));
+        setTurmasDisponiveis(turmasSnapshot.docs.map(doc => ({ 
+          id: doc.id, 
+          ...doc.data() 
+        })));
+
       } catch (error) {
-        console.error("Erro ao buscar professores:", error);
+        console.error("Erro ao buscar dados:", error);
+        alert("Erro ao carregar dados. Tente recarregar a página.");
       }
     };
 
-    const buscarMateriasETurmas = async () => {
-      try {
-        const materiasSnap = await getDocs(collection(db, "materias"));
-        const turmasSnap = await getDocs(collection(db, "turmas"));
-
-        setMateriasDisponiveis(materiasSnap.docs.map(doc => ({ id: doc.id, ...doc.data() })));
-        setTurmasDisponiveis(turmasSnap.docs.map(doc => ({ id: doc.id, ...doc.data() })));
-      } catch (error) {
-        console.error("Erro ao buscar matérias/turmas:", error);
-      }
-    };
-
-    buscarProfessores();
-    buscarMateriasETurmas();
+    buscarDados();
   }, []);
 
-  const criarUsuarioProfessor = async (email, nome) => {
+  const criarUsuarioProfessor = async (email, nome, cpf) => {
     try {
       if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-        throw new Error("Email do professor inválido");
+        throw new Error("Email inválido");
       }
 
-      const senha = `${nome.toLowerCase().slice(0,3)}${novoProfessor.cpf.slice(-4)}!`;
+      const senha = `${nome.toLowerCase().slice(0,3)}${cpf.slice(-4)}!`;
       const userCredential = await createUserWithEmailAndPassword(auth, email, senha);
-
-      return userCredential.user.uid;
+      
+      return {
+        uid: userCredential.user.uid,
+        senhaTemporaria: senha
+      };
     } catch (error) {
       console.error("Erro ao criar usuário:", error);
-      throw new Error(`Falha ao criar usuário: ${error.message}`);
+      throw error;
     }
   };
 
   const criarRegistroUsuario = async (uid, email, professorId, nome) => {
     try {
-      await addDoc(collection(db, "usuarios"), {
+      await setDoc(doc(db, "usuarios", uid), {
         uid,
         email,
         tipo: "professor",
-        professorId,
+        professorId, // Garante que o professorId seja salvo
         nome,
         criadoEm: new Date().toISOString(),
         permissoes: {
@@ -80,6 +90,7 @@ function GerenciamentoProfessores() {
           acessoProfessor: true
         }
       });
+      console.log(`Registro de usuário criado para professor ${professorId}`);
     } catch (error) {
       console.error("Erro ao criar registro de usuário:", error);
       throw error;
@@ -87,27 +98,52 @@ function GerenciamentoProfessores() {
   };
 
   const adicionarOuEditarProfessor = async () => {
-    const nomeTrimado = novoProfessor.nome.trim();
-    if (!nomeTrimado) return;
+    if (!novoProfessor.nome.trim()) {
+      alert("Preencha o nome do professor");
+      return;
+    }
 
     try {
       if (modoEdicao && professorEditandoId) {
+        // Edição de professor existente
         await updateDoc(doc(db, "professores", professorEditandoId), novoProfessor);
-        setProfessores((prev) =>
-          prev.map((p) => p.id === professorEditandoId ? { ...p, ...novoProfessor } : p)
-        );
+        setProfessores(professores.map(p => 
+          p.id === professorEditandoId ? { ...p, ...novoProfessor } : p
+        ));
       } else {
-        const docRef = await addDoc(collection(db, "professores"), {
+        // Cadastro de novo professor
+        // Primeiro cria o documento do professor
+        const professorRef = await addDoc(collection(db, "professores"), {
           ...novoProfessor,
-          criadoEm: new Date().toISOString(),
+          criadoEm: new Date().toISOString()
         });
 
-        const userId = await criarUsuarioProfessor(novoProfessor.email, novoProfessor.nome);
-        await criarRegistroUsuario(userId, novoProfessor.email, docRef.id, novoProfessor.nome);
+        // Cria usuário de autenticação
+        const { uid, senhaTemporaria } = await criarUsuarioProfessor(
+          novoProfessor.email,
+          novoProfessor.nome,
+          novoProfessor.cpf
+        );
 
-        setProfessores([...professores, { id: docRef.id, ...novoProfessor }]);
+        // Atualiza o professor com o uid do usuário de autenticação
+        await updateDoc(doc(db, "professores", professorRef.id), {
+          authUid: uid
+        });
+
+        // Cria registro na coleção usuarios com referência ao professor
+        await criarRegistroUsuario(uid, novoProfessor.email, professorRef.id, novoProfessor.nome);
+
+        // Atualiza a lista de professores local
+        setProfessores([...professores, { 
+          id: professorRef.id, 
+          ...novoProfessor,
+          authUid: uid
+        }]);
+
+        alert(`Professor cadastrado com sucesso!\n\nEmail: ${novoProfessor.email}\nSenha temporária: ${senhaTemporaria}\n\nEsta é a única vez que a senha será exibida. Anote-a com segurança!`);
       }
 
+      // Limpa o formulário
       setNovoProfessor({
         nome: "",
         cpf: "",
@@ -121,51 +157,83 @@ function GerenciamentoProfessores() {
       setModoEdicao(false);
       setProfessorEditandoId(null);
 
-      alert(`Professor cadastrado com sucesso!\n\nEmail: ${novoProfessor.email}\nSenha temporária: ${novoProfessor.nome.toLowerCase().slice(0, 3)}${novoProfessor.cpf.slice(-4)}!`);
     } catch (error) {
-      console.error("Erro ao salvar professor", error);
-
-      let mensagemErro = "Erro ao cadastrar: ";
-      if (error.message.includes("auth/invalid-email")) {
-        mensagemErro += "Email inválido.";
-      } else if (error.message.includes("auth/email-already-in-use")) {
-        mensagemErro += "Já existe um usuário com este email.";
+      console.error("Erro ao salvar professor:", error);
+      
+      let mensagem = "Erro ao salvar professor: ";
+      if (error.code === 'auth/email-already-in-use') {
+        mensagem += "Este email já está em uso.";
+      } else if (error.code === 'auth/invalid-email') {
+        mensagem += "Email inválido.";
+      } else if (error.code === 'auth/weak-password') {
+        mensagem += "A senha é muito fraca.";
       } else {
-        mensagemErro += error.message;
+        mensagem += error.message;
       }
-      alert(mensagemErro);
+      
+      alert(mensagem);
     }
   };
 
   const excluirProfessor = async (id) => {
+    if (!confirm("Tem certeza que deseja excluir este professor?\n\nEsta ação não pode ser desfeita!")) return;
+
     try {
       await deleteDoc(doc(db, "professores", id));
       setProfessores(professores.filter(p => p.id !== id));
+      alert("Professor excluído com sucesso");
     } catch (error) {
       console.error("Erro ao excluir professor:", error);
+      alert("Erro ao excluir professor");
     }
   };
 
   const editarProfessor = (professor) => {
-    setNovoProfessor({ ...professor });
+    setNovoProfessor({ 
+      nome: professor.nome,
+      cpf: professor.cpf,
+      email: professor.email,
+      dataDeNascimento: professor.dataDeNascimento,
+      foto: professor.foto,
+      materias: professor.materias || [],
+      turmas: professor.turmas || []
+    });
     setModoEdicao(true);
     setProfessorEditandoId(professor.id);
     setMostrarPopup(true);
   };
 
   const handleImagemChange = (e) => {
-    const arquivo = e.target.files[0];
-    if (arquivo) {
-      const url = URL.createObjectURL(arquivo);
-      setNovoProfessor({ ...novoProfessor, foto: url });
+    const file = e.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        setNovoProfessor(prev => ({ ...prev, foto: event.target.result }));
+      };
+      reader.readAsDataURL(file);
     }
   };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
+    setNovoProfessor(prev => ({ ...prev, [name]: value }));
+  };
+
+  const toggleMateria = (materiaId) => {
     setNovoProfessor(prev => ({
       ...prev,
-      [name]: value
+      materias: prev.materias.includes(materiaId)
+        ? prev.materias.filter(id => id !== materiaId)
+        : [...prev.materias, materiaId]
+    }));
+  };
+
+  const toggleTurma = (turmaId) => {
+    setNovoProfessor(prev => ({
+      ...prev,
+      turmas: prev.turmas.includes(turmaId)
+        ? prev.turmas.filter(id => id !== turmaId)
+        : [...prev.turmas, turmaId]
     }));
   };
 
@@ -176,85 +244,144 @@ function GerenciamentoProfessores() {
         <div className="sidebar">
           <SidebarMenu />
         </div>
+        
         <main className="content">
-          <h2>Gerenciamento de Professores</h2>
-
-          <button className="botao" onClick={() => {
-            setMostrarPopup(true);
-            setModoEdicao(false);
-            setNovoProfessor({
-              nome: "",
-              cpf: "",
-              email: "",
-              dataDeNascimento: "",
-              foto: "",
-              materias: [],
-              turmas: []
-            });
-          }}>
-            Cadastrar Professor
-          </button>
+          <div className="header-with-button">
+            <h2>Gerenciamento de Professores</h2>
+            <button 
+              className="botao"
+              onClick={() => {
+                setMostrarPopup(true);
+                setModoEdicao(false);
+                setNovoProfessor({
+                  nome: "",
+                  cpf: "",
+                  email: "",
+                  dataDeNascimento: "",
+                  foto: "",
+                  materias: [],
+                  turmas: []
+                });
+              }}
+            >
+              Cadastrar Professor
+            </button>
+          </div>
 
           <div className="cardsContainer">
-            {professores.map((prof) => (
-              <div key={prof.id} className="cardProfessor">
-                <div className="conteudoCardBranco">
-                  {prof.foto && <img className="cardfoto" src={prof.foto} alt="Foto" />}
-                  <p>Professor: {prof.nome}</p>
-                  <p>CPF: {prof.cpf}</p>
-                  <p>Email: {prof.email}</p>
-                  <p>Data de Nascimento: {prof.dataDeNascimento}</p>
-                  <p> Matérias: {
-                  prof.materias?.map(id =>
-                    materiasDisponiveis.find(m => m.id === id)?.nome || id
-                  ).join(', ') || 'Nenhuma'
-                }
-                </p>
-                <p>
-                  Turmas: {
-                    prof.turmas?.map(id => {
+            {professores.length > 0 ? (
+              professores.map(prof => (
+                <div key={prof.id} className="cardProfessor">
+                  <div className="conteudoCardBranco">
+                    {prof.foto && <img src={prof.foto} alt="Foto" className="cardfoto" />}
+                    <h3>{prof.nome}</h3>
+                    <p><strong>Email:</strong> {prof.email}</p>
+                    <p><strong>CPF:</strong> {prof.cpf}</p>
+                    <p><strong>Matérias:</strong> {prof.materias?.map(id => 
+                      materiasDisponiveis.find(m => m.id === id)?.nome || id
+                    ).join(', ') || 'Nenhuma'}</p>
+                    <p><strong>Turmas:</strong> {prof.turmas?.map(id => {
                       const turma = turmasDisponiveis.find(t => t.id === id);
                       return turma ? `${turma.serie} - ${turma.periodo}` : id;
-                    }).join(', ') || 'Nenhuma'
-                  }
-                </p>
-
-                  <button className="botaoPopup" onClick={() => editarProfessor(prof)}>Editar</button>
-                  <button className="botaoPopupCancelar" onClick={() => excluirProfessor(prof.id)}>Excluir</button>
+                    }).join(', ') || 'Nenhuma'}</p>
+                    
+                    <div className="botoes-card">
+                      <button 
+                        className="botao-editar"
+                        onClick={() => editarProfessor(prof)}
+                      >
+                        Editar
+                      </button>
+                      <button 
+                        className="botao-excluir"
+                        onClick={() => excluirProfessor(prof.id)}
+                      >
+                        Excluir
+                      </button>
+                    </div>
+                  </div>
                 </div>
-              </div>
-            ))}
+              ))
+            ) : (
+              <p className="sem-registros">Nenhum professor cadastrado</p>
+            )}
           </div>
 
           {mostrarPopup && (
             <div className="popupOverlay">
               <div className="popup">
                 <h3>{modoEdicao ? "Editar Professor" : "Novo Professor"}</h3>
+                
+                <div className="form-group">
+                  <label>Nome Completo *</label>
+                  <input
+                    type="text"
+                    name="nome"
+                    value={novoProfessor.nome}
+                    onChange={handleChange}
+                    required
+                  />
+                </div>
 
-                <input type="text" name="nome" placeholder="Nome completo" value={novoProfessor.nome} onChange={handleChange} />
-                <input type="text" name="cpf" placeholder="CPF" value={novoProfessor.cpf} onChange={handleChange} />
-                <input type="email" name="email" placeholder="Email pessoal" value={novoProfessor.email} onChange={handleChange} />
-                <input type="date" name="dataDeNascimento" value={novoProfessor.dataDeNascimento} onChange={handleChange} />
+                <div className="form-row">
+                  <div className="form-group">
+                    <label>CPF *</label>
+                    <input
+                      type="text"
+                      name="cpf"
+                      value={novoProfessor.cpf}
+                      onChange={handleChange}
+                      required
+                      maxLength="11"
+                      pattern="\d{11}"
+                      title="Digite apenas números (11 dígitos)"
+                    />
+                  </div>
+                  
+                  <div className="form-group">
+                    <label>Data de Nascimento</label>
+                    <input
+                      type="date"
+                      name="dataDeNascimento"
+                      value={novoProfessor.dataDeNascimento}
+                      onChange={handleChange}
+                    />
+                  </div>
+                </div>
 
-                <div className="filtro">
+                <div className="form-group">
+                  <label>Email *</label>
+                  <input
+                    type="email"
+                    name="email"
+                    value={novoProfessor.email}
+                    onChange={handleChange}
+                    required
+                  />
+                </div>
+
+                <div className="form-group">
+                  <label>Foto</label>
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={handleImagemChange}
+                  />
+                  {novoProfessor.foto && (
+                    <img src={novoProfessor.foto} alt="Preview" className="foto-preview" />
+                  )}
+                </div>
+
+                <div className="form-group">
                   <label>Matérias</label>
-                  <div className="checkboxGroup">
-                    {materiasDisponiveis.map((materia) => (
-                      <div className="checkboxItem" key={materia.id}>
+                  <div className="checkbox-container">
+                    {materiasDisponiveis.map(materia => (
+                      <div key={materia.id} className="checkbox-item">
                         <input
                           type="checkbox"
                           id={`materia-${materia.id}`}
-                          value={materia.id}
                           checked={novoProfessor.materias.includes(materia.id)}
-                          onChange={(e) => {
-                            const { value, checked } = e.target;
-                            setNovoProfessor(prev => ({
-                              ...prev,
-                              materias: checked
-                                ? [...prev.materias, value]
-                                : prev.materias.filter((id) => id !== value),
-                            }));
-                          }}
+                          onChange={() => toggleMateria(materia.id)}
                         />
                         <label htmlFor={`materia-${materia.id}`}>{materia.nome}</label>
                       </div>
@@ -262,44 +389,43 @@ function GerenciamentoProfessores() {
                   </div>
                 </div>
 
-                <div className="filtro">
+                <div className="form-group">
                   <label>Turmas</label>
-                  <div className="checkboxGroup">
-                    {turmasDisponiveis.map((turma) => (
-                      <div className="checkboxItem" key={turma.id}>
+                  <div className="checkbox-container">
+                    {turmasDisponiveis.map(turma => (
+                      <div key={turma.id} className="checkbox-item">
                         <input
                           type="checkbox"
                           id={`turma-${turma.id}`}
-                          value={turma.id}
                           checked={novoProfessor.turmas.includes(turma.id)}
-                          onChange={(e) => {
-                            const { value, checked } = e.target;
-                            setNovoProfessor(prev => ({
-                              ...prev,
-                              turmas: checked
-                                ? [...prev.turmas, value]
-                                : prev.turmas.filter((id) => id !== value),
-                            }));
-                          }}
+                          onChange={() => toggleTurma(turma.id)}
                         />
-                        <label htmlFor={`turma-${turma.id}`}>{turma.serie} - {turma.periodo}</label>
+                        <label htmlFor={`turma-${turma.id}`}>
+                          {turma.serie} - {turma.periodo}
+                        </label>
                       </div>
                     ))}
                   </div>
                 </div>
 
-                <input type="file" accept="image/*" onChange={handleImagemChange} />
-                {novoProfessor.foto && <img className="cardfoto" src={novoProfessor.foto} alt="Foto do Professor" />}
-
-                <div className="botoesPopup">
-                  <button className="botaoPopupCancelar" onClick={() => {
-                    setMostrarPopup(false);
-                    setModoEdicao(false);
-                    setProfessorEditandoId(null);
-                  }}>Cancelar</button>
-
-                  <button className="botaoPopup" onClick={adicionarOuEditarProfessor}>
-                    {modoEdicao ? "Salvar Alterações" : "Cadastrar"}
+                <div className="botoes-popup">
+                  <button
+                    type="button"
+                    className="botao-cancelar"
+                    onClick={() => {
+                      setMostrarPopup(false);
+                      setModoEdicao(false);
+                    }}
+                  >
+                    Cancelar
+                  </button>
+                  
+                  <button
+                    type="button"
+                    className="botao-confirmar"
+                    onClick={adicionarOuEditarProfessor}
+                  >
+                    {modoEdicao ? "Salvar" : "Cadastrar"}
                   </button>
                 </div>
               </div>
