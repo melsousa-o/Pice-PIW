@@ -3,10 +3,31 @@ import SidebarMenuProf from './1Componentes/SidebarMenu';
 import Footer from "./1Componentes/Footer";
 import Calendar from "react-calendar";
 import 'react-calendar/dist/Calendar.css';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { auth } from '../firebase';
+import { doc, getDoc } from 'firebase/firestore';
 
 function ProfTelaInicial () {
-  const [data, setData] = useState(new Date());
+  const [data, setData] = useState(new Date()); 
+  const [nomeUsuario, setNomeUsuario] = useState('');
+
+  useEffect(() => {
+    const savedData = JSON.parse(localStorage.getItem('userData'));
+    if (savedData?.nome) {
+      setNomeUsuario(savedData.nome.split(' ')[0]);
+      return;
+    }
+
+    const user = auth.currentUser;
+    if (user) {
+      getDoc(doc(db, "usuarios", user.uid)).then((doc) => {
+        if (doc.exists()) {
+          setNomeUsuario(doc.data().nome.split(' ')[0]);
+        }
+      }).catch(console.error);
+    }
+  }, []);
+
 
   // Dados simulados das aulas do dia
   const aulasHoje = [
@@ -24,7 +45,7 @@ function ProfTelaInicial () {
         <SidebarMenuProf />
 
         <main className="content">
-          <h2>Bem-vinda, Professora</h2>
+          <h2>Bem-vinda, {nomeUsuario}</h2>
 
           <section className="secao-aulas">
             <h3>Suas aulas de hoje:</h3>
