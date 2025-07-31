@@ -17,22 +17,35 @@ function ProtectedRoute({ children, allowedProfiles }) {
         return;
       }
 
-      if (allowedProfiles) {
-        try {
-          const userDoc = await getDoc(doc(db, "usuarios", user.uid));
-          
-          if (!userDoc.exists() || !allowedProfiles.includes(userDoc.data().tipo)) {
-            navigate('/acesso-negado');
-            return;
-          }
-        } catch (err) {
-          console.error("Erro ao verificar tipo de usuário:", err);
-          navigate('/erro');
+      try {
+        const userDoc = await getDoc(doc(db, "usuarios", user.uid));
+        
+        if (!userDoc.exists()) {
+          console.error('Documento do usuário não encontrado');
+          navigate('/login');
           return;
         }
-      }
 
-      if (!cancelado) setCarregando(false);
+        const userData = userDoc.data();
+        
+        // Verificação adicional para professores
+        if (userData.tipo === 'professor' && !userData.professorId) {
+          console.error('Professor sem ID de professor associado');
+          navigate('/login');
+          return;
+        }
+
+        if (allowedProfiles && !allowedProfiles.includes(userData.tipo)) {
+          console.error('Acesso negado. Tipo de usuário:', userData.tipo);
+          navigate('/acesso-negado');
+          return;
+        }
+
+        if (!cancelado) setCarregando(false);
+      } catch (err) {
+        console.error("Erro ao verificar tipo de usuário:", err);
+        navigate('/erro');
+      }
     });
 
     return () => {

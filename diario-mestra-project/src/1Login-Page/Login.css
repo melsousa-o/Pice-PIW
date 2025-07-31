@@ -1,4 +1,5 @@
-  .container {
+/* Login.css */
+.container {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -26,7 +27,6 @@
   margin-bottom: 15px;
   font-size: 14px;
   font-weight: bold;
-
 }
 
 .login-box input {
@@ -49,23 +49,87 @@
   transition: background-color 0.3s;
 }
 
-.login-box button:hover {
-  background-color: var(--vinho-claro);
-}
-
-.login-box a {
-  font-size: 12px;
+.link-recuperacao {
+  background: none;
+  border: none;
   color: var(--branco);
-  text-align: center;
-  margin-top: 5px;
   text-decoration: underline;
+  cursor: pointer;
+  padding: 0;
+  font-size: 12px;
 }
 
-.login-box p {
-  color: var(--branco);
-  text-align: center;
+.popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
 }
 
-.login-box p:hover {
-  color: var(--amarelo);
+.popup {
+  background-color: white;
+  padding: 25px;
+  border-radius: 8px;
+  width: 90%;
+  max-width: 400px;
+  box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
+}
+
+.popup label {
+  display: block;
+  margin-bottom: 15px;
+  font-weight: 500;
+  color: #333;
+}
+
+.popup input {
+  width: 100%;
+  padding: 10px;
+  margin-top: 5px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 15px;
+}
+
+.botoes-popup {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.botao-popup {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.botao-popup-cancelar {
+  background-color: #f0f0f0;
+  color: #333;
+}
+
+.botao-popup-confirmar {
+  background-color: #4CAF50;
+  color: white;
+}
+
+.erro-popup {
+  color: #f44336;
+  margin: 10px 0;
+  font-size: 14px;
+}
+
+.sucesso-popup {
+  color: #4CAF50;
+  margin: 10px 0;
+  font-size: 14px;
 }

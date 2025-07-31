@@ -5,16 +5,19 @@ import ProtectedRoute from './1Login-Page/ProtectRoute';
 import LoginBox from './1Login-Page/LoginPage';
 import CadastroPage from './2Cadastro-Page/CadastroPage';
 
+// Coordenação
 import DashboardCoord from './3Coordenacao/CoordTelaInicial'; 
 import CoordGerenciamento from './3Coordenacao/CoordGerenciamento';
 import GerenciamentoMaterias from './3Coordenacao/GerenciamentoMaterias';
 import GerenciamentoTurmas from './3Coordenacao/GerenciamentoTurmas';
 import GerenciamentoProfessores from './3Coordenacao/GerenciamentoProfessores';
-import GerenciamentoAlunos from './3Coordenacao/GereciamentoAlunos';
-
+import GerenciamentoAlunos from './3Coordenacao/GerenciamentoAlunos';
 import Relatorio from './3Coordenacao/Relatorio';
 import Mensagem from './3Coordenacao/Mensagem';
 import CoordConfigPage from './3Coordenacao/CoordConfigPage';
+
+// Professor
+import ProfTelaInicial from './4Professor/InicialProfessor';
 
 function App() {
    useEffect(() => {
@@ -83,6 +86,13 @@ function App() {
         <Route path="/configuracoes" element={
           <ProtectedRoute allowedProfiles={['coordenacao']}>
             <CoordConfigPage />
+          </ProtectedRoute>
+        } />
+
+        {/* Rotas protegidas para professores */}
+        <Route path="/professor" element={
+          <ProtectedRoute allowedProfiles={['professor']}>
+            <ProfTelaInicial />
           </ProtectedRoute>
         } />
 

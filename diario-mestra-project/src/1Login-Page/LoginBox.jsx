@@ -1,16 +1,25 @@
 import './Login.css';
 import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { signInWithEmailAndPassword } from 'firebase/auth';
+import { signInWithEmailAndPassword, updatePassword } from 'firebase/auth';
 import { doc, getDoc } from 'firebase/firestore';
 import { auth, db } from '../firebase';
 
 function LoginBox() {
+  // Estados para login
   const [email, setEmail] = useState('');
   const [senha, setSenha] = useState('');
   const [erro, setErro] = useState('');
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+
+  // Estados para redefinição direta de senha
+  const [mostrarPopupRedefinir, setMostrarPopupRedefinir] = useState(false);
+  const [emailRedefinir, setEmailRedefinir] = useState('');
+  const [senhaAtual, setSenhaAtual] = useState('');
+  const [novaSenha, setNovaSenha] = useState('');
+  const [confirmarSenha, setConfirmarSenha] = useState('');
+  const [erroRedefinir, setErroRedefinir] = useState('');
 
   async function handleLogin(e) {
     e.preventDefault();
@@ -24,39 +33,20 @@ function LoginBox() {
     }
 
     try {
-      // 1. Autenticação
       const { user } = await signInWithEmailAndPassword(auth, email, senha);
-      console.log('Usuário autenticado:', user.uid);
-
-      // 2. Busca dados básicos na coleção 'usuarios'
       const userDoc = await getDoc(doc(db, "usuarios", user.uid));
       
-      if (!userDoc.exists()) {
-        throw new Error('Usuário não cadastrado no sistema.');
-      }
+      if (!userDoc.exists()) throw new Error('Usuário não cadastrado no sistema.');
 
       const userData = userDoc.data();
-      console.log('Documento do usuário:', {
-        exists: userDoc.exists(),
-        data: userData,
-        professorId: userData.professorId
-      });
+      if (!userData.tipo) throw new Error('Tipo de usuário não definido.');
 
-      // 3. Se for professor, busca dados complementares
       if (userData.tipo === "professor") {
-        const professorId = userData.professorId || user.uid;
-        const professorDoc = await getDoc(doc(db, "professores", professorId));
-        
-        if (!professorDoc.exists()) {
-          console.warn('Dados complementares do professor não encontrados');
-        } else {
-          // Combina todos os dados do professor
-          Object.assign(userData, professorDoc.data());
-          console.log('Dados completos do professor:', userData);
-        }
+        if (!userData.professorId) throw new Error('ID do professor não encontrado.');
+        const professorDoc = await getDoc(doc(db, "professores", userData.professorId));
+        if (professorDoc.exists()) Object.assign(userData, professorDoc.data());
       }
 
-      // 4. Armazena dados no localStorage
       localStorage.setItem('userData', JSON.stringify({
         uid: user.uid,
         nome: userData.nome,
@@ -68,73 +58,182 @@ function LoginBox() {
         })
       }));
 
-      // 5. Redireciona conforme o tipo de usuário
-      const rotas = {
+      navigate({
         coordenacao: '/coord',
         professor: '/professor',
         responsavel: '/responsavel',
-      };
-
-      const rotaDestino = rotas[userData.tipo] ?? '/';
-      console.log('Redirecionando para:', rotaDestino);
-      navigate(rotaDestino);
+      }[userData.tipo] ?? '/');
       
     } catch (error) {
-      console.error('Erro completo no login:', {
-        code: error.code,
-        message: error.message,
-        stack: error.stack
-      });
-      
-      const mensagensErro = {
+      setErro({
         'auth/invalid-email': 'E‑mail inválido.',
         'auth/user-not-found': 'Usuário não encontrado.',
         'auth/wrong-password': 'Senha incorreta.',
         'auth/too-many-requests': 'Muitas tentativas. Tente novamente mais tarde.',
         'auth/invalid-credential': 'Credenciais inválidas. Verifique e-mail e senha.',
-      };
-
-      setErro(mensagensErro[error.code] || error.message);
+      }[error.code] || error.message);
     } finally {
       setLoading(false);
     }
   }
 
+  async function handleRedefinirSenha() {
+    setErroRedefinir('');
+    
+    // Validações
+    if (!emailRedefinir || !senhaAtual || !novaSenha || !confirmarSenha) {
+      setErroRedefinir('Preencha todos os campos.');
+      return;
+    }
+
+    if (novaSenha.length < 8) {
+      setErroRedefinir('A senha deve ter no mínimo 8 caracteres.');
+      return;
+    }
+
+    if (novaSenha !== confirmarSenha) {
+      setErroRedefinir('As senhas não coincidem.');
+      return;
+    }
+
+    try {
+      // 1. Autentica com a senha atual
+      const { user } = await signInWithEmailAndPassword(auth, emailRedefinir, senhaAtual);
+      
+      // 2. Atualiza para a nova senha
+      await updatePassword(user, novaSenha);
+      
+      setErroRedefinir('✔️ Senha alterada com sucesso!');
+      setTimeout(() => {
+        setMostrarPopupRedefinir(false);
+        setErroRedefinir('');
+      }, 2000);
+    } catch (error) {
+      console.error('Erro ao redefinir senha:', error);
+      setErroRedefinir('❌ Senha atual incorreta');
+    }
+  }
+
   return (
-    <form className="login-box" onSubmit={handleLogin}>
-      <label>
-        E‑mail
-        <input
-          type="email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          disabled={loading}
-          required
-        />
-      </label>
+    <>
+      <form className="login-box" onSubmit={handleLogin}>
+        <label>
+          E‑mail
+          <input
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            disabled={loading}
+            required
+          />
+        </label>
 
-      <label>
-        Senha
-        <input
-          type="password"
-          value={senha}
-          onChange={(e) => setSenha(e.target.value)}
-          disabled={loading}
-          required
-        />
-      </label>
+        <label>
+          Senha
+          <input
+            type="password"
+            value={senha}
+            onChange={(e) => setSenha(e.target.value)}
+            disabled={loading}
+            required
+          />
+        </label>
 
-      {erro && <p className="erro">{erro}</p>}
+        {erro && <p className="erro">{erro}</p>}
 
-      <button type="submit" disabled={loading}>
-        {loading ? 'Entrando…' : 'Entrar'}
-      </button>
+        <button type="submit" disabled={loading}>
+          {loading ? 'Entrando…' : 'Entrar'}
+        </button>
 
-      <div className="links-ajuda">
-        <Link to="/esquecisenha">Esqueci minha senha</Link><br />
-        <Link to="/cadastrocoord">Primeiro acesso à coordenação</Link>
-      </div>
-    </form>
+        <div className="links-ajuda">
+          <button 
+            type="button" 
+            className="link-recuperacao" 
+            onClick={() => {
+              setMostrarPopupRedefinir(true);
+              setEmailRedefinir(email); // Pré-preencher com o email do login
+            }}
+          >
+            Esqueci minha senha
+          </button>
+          <br />
+          <Link to="/cadastrocoord">Primeiro acesso à coordenação</Link>
+        </div>
+      </form>
+
+      {mostrarPopupRedefinir && (
+        <div className="popup-overlay">
+          <div className="popup">
+            <h3>Redefinir Senha</h3>
+            
+            <label>
+              E-mail cadastrado
+              <input
+                type="email"
+                value={emailRedefinir}
+                onChange={(e) => setEmailRedefinir(e.target.value)}
+                disabled={loading}
+              />
+            </label>
+
+            <label>
+              Senha atual
+              <input
+                type="password"
+                value={senhaAtual}
+                onChange={(e) => setSenhaAtual(e.target.value)}
+                placeholder="Digite sua senha atual"
+              />
+            </label>
+
+            <label>
+              Nova senha (mínimo 8 caracteres)
+              <input
+                type="password"
+                value={novaSenha}
+                onChange={(e) => setNovaSenha(e.target.value)}
+              />
+            </label>
+
+            <label>
+              Confirmar nova senha
+              <input
+                type="password"
+                value={confirmarSenha}
+                onChange={(e) => setConfirmarSenha(e.target.value)}
+              />
+            </label>
+
+            {erroRedefinir && (
+              <p className={erroRedefinir.includes('✔️') ? 'sucesso-popup' : 'erro-popup'}>
+                {erroRedefinir}
+              </p>
+            )}
+
+            <div className="botoes-popup">
+              <button
+                type="button"
+                className="botao-popup botao-popup-cancelar"
+                onClick={() => {
+                  setMostrarPopupRedefinir(false);
+                  setErroRedefinir('');
+                }}
+              >
+                Cancelar
+              </button>
+              <button
+                type="button"
+                className="botao-popup botao-popup-confirmar"
+                onClick={handleRedefinirSenha}
+                disabled={loading}
+              >
+                Salvar
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+    </>
   );
 }
 
