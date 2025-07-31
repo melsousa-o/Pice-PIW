@@ -38,27 +38,27 @@ function GerenciamentoAlunos() {
     buscarTurmas();
   }, []);
 
-  const criarUsuarioResponsavel = async (cpfResponsavel, responsavelNome) => {
-    try {
-      if (!cpfResponsavel || cpfResponsavel.replace(/\D/g, '').length < 11) {
-        throw new Error("CPF do responsável inválido");
-      }
+  // const criarUsuarioResponsavel = async (cpfResponsavel, responsavelNome) => {
+  //   try {
+  //     if (!cpfResponsavel || cpfResponsavel.replace(/\D/g, '').length < 11) {
+  //       throw new Error("CPF do responsável inválido");
+  //     }
 
-      const cpfLimpo = cpfResponsavel.replace(/\D/g, '').slice(-11);
-      const emailEscola = `responsavel.${cpfLimpo}@escolamestra.com`;
-      const senha = `${cpfLimpo.slice(-6)}`;
+  //     const cpfLimpo = cpfResponsavel.replace(/\D/g, '').slice(-11);
+  //     const emailEscola = `responsavel.${cpfLimpo}@escolamestra.com`;
+  //     const senha = `${cpfLimpo.slice(-6)}`;
 
-      if (!/^[^@]+@[^@]+\.[^@]+$/.test(emailEscola)) {
-        throw new Error("Email gerado é inválido");
-      }
+  //     if (!/^[^@]+@[^@]+\.[^@]+$/.test(emailEscola)) {
+  //       throw new Error("Email gerado é inválido");
+  //     }
 
-      const userCredential = await createUserWithEmailAndPassword(auth, emailEscola, senha);
-      return userCredential.user.uid;
-    } catch (error) {
-      console.error("Erro ao criar usuário:", error);
-      throw new Error(`Falha ao criar usuário: ${error.message}`);
-    }
-  };
+  //     const userCredential = await createUserWithEmailAndPassword(auth, emailEscola, senha);
+  //     return userCredential.user.uid;
+  //   } catch (error) {
+  //     console.error("Erro ao criar usuário:", error);
+  //     throw new Error(`Falha ao criar usuário: ${error.message}`);
+  //   }
+  // };
 
   const criarRegistroUsuario = async (uid, cpfResponsavel, alunoId, responsavelNome) => {
     try {

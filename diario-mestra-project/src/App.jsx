@@ -18,6 +18,7 @@ import CoordConfigPage from './3Coordenacao/CoordConfigPage';
 
 // Professor
 import ProfTelaInicial from './4Professor/InicialProfessor';
+import RelatoriosProf from './4Professor/RelatoriosProf';
 
 function App() {
    useEffect(() => {
@@ -95,6 +96,12 @@ function App() {
             <ProfTelaInicial />
           </ProtectedRoute>
         } />
+
+<Route path="/relatorios" element={
+  <ProtectedRoute allowedProfiles={['professor']}>
+    <RelatoriosProf />  {/* Nome correto do componente */}
+  </ProtectedRoute>
+} />
 
         {/* Redirecionamento para páginas não encontradas */}
         <Route path="*" element={<Navigate to="/" />} />

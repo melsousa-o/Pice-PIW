@@ -7,7 +7,7 @@ function SidebarMenuProf() {
         <li><Link to="/inicio">Início</Link></li>
         <li><Link to="/lista">Lista de Chamada</Link></li>
         <li><Link to="/diário">Diário de aula</Link></li>
-        <li><Link to="/relatorio">Relatório</Link></li>
+        <li><Link to="/relatorios">Relatório</Link></li>
         <li><Link to="/mensagem">Mensagem</Link></li>
       </ul>
 

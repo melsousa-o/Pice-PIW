@@ -1,8 +1,10 @@
 import { useState } from "react";
-import HeaderCoord from "./1Componentes/HeaderCoordenacao";
+import HeaderCoord from "./1Componentes/Header";
 import SidebarMenu from "./1Componentes/SidebarMenu";
+import HeaderProf from "./1Componentes/Header";
 
-function Relatorios() {
+
+function RelatoriosProf() {
   const [filtros, setFiltros] = useState({
     periodo: "",
     turma: "",
@@ -21,7 +23,7 @@ function Relatorios() {
 
   return (
     <>
-      <HeaderCoord />
+      <HeaderProf />
 
       <div className="main-container">
         <div className="sidebar">
@@ -86,4 +88,4 @@ function Relatorios() {
   );
 }
 
-export default Relatorios;
+export default RelatoriosProf;
