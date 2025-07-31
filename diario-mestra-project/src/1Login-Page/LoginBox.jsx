@@ -6,14 +6,12 @@ import { doc, getDoc } from 'firebase/firestore';
 import { auth, db } from '../firebase';
 
 function LoginBox() {
-  // Estados para login
   const [email, setEmail] = useState('');
   const [senha, setSenha] = useState('');
   const [erro, setErro] = useState('');
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
-  // Estados para redefinição direta de senha
   const [mostrarPopupRedefinir, setMostrarPopupRedefinir] = useState(false);
   const [emailRedefinir, setEmailRedefinir] = useState('');
   const [senhaAtual, setSenhaAtual] = useState('');
@@ -80,7 +78,6 @@ function LoginBox() {
   async function handleRedefinirSenha() {
     setErroRedefinir('');
     
-    // Validações
     if (!emailRedefinir || !senhaAtual || !novaSenha || !confirmarSenha) {
       setErroRedefinir('Preencha todos os campos.');
       return;
@@ -97,10 +94,7 @@ function LoginBox() {
     }
 
     try {
-      // 1. Autentica com a senha atual
       const { user } = await signInWithEmailAndPassword(auth, emailRedefinir, senhaAtual);
-      
-      // 2. Atualiza para a nova senha
       await updatePassword(user, novaSenha);
       
       setErroRedefinir('✔️ Senha alterada com sucesso!');
@@ -151,12 +145,11 @@ function LoginBox() {
             className="link-recuperacao" 
             onClick={() => {
               setMostrarPopupRedefinir(true);
-              setEmailRedefinir(email); // Pré-preencher com o email do login
+              setEmailRedefinir(email);
             }}
           >
             Esqueci minha senha
           </button>
-          <br />
           <Link to="/cadastrocoord">Primeiro acesso à coordenação</Link>
         </div>
       </form>

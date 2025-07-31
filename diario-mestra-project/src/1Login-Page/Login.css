@@ -1,4 +1,3 @@
-/* Login.css */
 .container {
   display: flex;
   justify-content: center;
@@ -35,6 +34,8 @@
   border: none;
   border-radius: 5px;
   width: 100%;
+  background-color: var(--branco);
+  color: var(--texto);
 }
 
 .login-box button {
@@ -49,14 +50,41 @@
   transition: background-color 0.3s;
 }
 
-.link-recuperacao {
+.login-box button:hover {
+  background-color: var(--vinho-claro);
+}
+
+.links-ajuda {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+  margin-top: 10px;
+}
+
+.links-ajuda a,
+.links-ajuda .link-recuperacao {
+  color: var(--branco);
+  text-decoration: none;
+  font-size: 12px;
   background: none;
   border: none;
-  color: var(--branco);
-  text-decoration: underline;
   cursor: pointer;
   padding: 0;
+  text-align: center;
+  width: 100%;
+}
+
+.links-ajuda a:hover,
+.links-ajuda .link-recuperacao:hover {
+  text-decoration: underline;
+  color: var(--amarelo);
+}
+
+.erro {
+  color: #ff6b6b;
   font-size: 12px;
+  margin: 5px 0;
 }
 
 .popup-overlay {
@@ -73,7 +101,7 @@
 }
 
 .popup {
-  background-color: white;
+  background-color: var(--branco);
   padding: 25px;
   border-radius: 8px;
   width: 90%;
@@ -81,20 +109,26 @@
   box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
 }
 
+.popup h3 {
+  color: var(--vinho);
+  margin-bottom: 20px;
+}
+
 .popup label {
   display: block;
   margin-bottom: 15px;
   font-weight: 500;
-  color: #333;
+  color: var(--texto);
 }
 
 .popup input {
   width: 100%;
   padding: 10px;
   margin-top: 5px;
-  border: 1px solid #ddd;
+  border: 1px solid var(--cinza);
   border-radius: 4px;
   font-size: 15px;
+  background-color: var(--cinza-claríssimo);
 }
 
 .botoes-popup {
@@ -110,16 +144,25 @@
   border-radius: 4px;
   cursor: pointer;
   font-weight: 500;
+  transition: all 0.3s;
 }
 
 .botao-popup-cancelar {
-  background-color: #f0f0f0;
-  color: #333;
+  background-color: var(--azul);
+  color: var(--texto);
+}
+
+.botao-popup-cancelar:hover {
+  background-color: #7da8e8;
 }
 
 .botao-popup-confirmar {
-  background-color: #4CAF50;
-  color: white;
+  background-color: var(--vinho);
+  color: var(--branco);
+}
+
+.botao-popup-confirmar:hover {
+  background-color: var(--vinho-escuro);
 }
 
 .erro-popup {
